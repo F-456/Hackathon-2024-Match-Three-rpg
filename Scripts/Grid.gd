@@ -1,9 +1,5 @@
 extends Node2D
 
-# Determines the game state (wait or move)
-enum {wait, move}
-var state
-
 # Dimensions of the grid in terms of cells
 @export var width: int
 @export var height: int
@@ -15,8 +11,6 @@ var state
 # Starting positions of the grid, calculated from the window size.
 @onready var x_start = ((get_window().size.x / 2.0) - ((width/2.0) * offset ) + (offset / 2))
 @onready var y_start = ((get_window().size.y / 2.0) + ((height/2.0) * offset ) - (offset / 2))
-
-#@export var empty_spaces: PackedVector2Array
 
 @onready var possible_dots = [
 	preload("res://Scenes/Dots/blue_dot.tscn"),
@@ -38,7 +32,7 @@ var dot_two = null
 
 var last_place = Vector2(0,0)
 var last_direction = Vector2(0,0)
-var move_checked = false
+## var move_checked = false
 
 # Track the grid positions of the player's initial and final touch during a swipe
 var first_touch = Vector2(0,0)
@@ -47,6 +41,10 @@ var final_touch = Vector2(0,0)
 # Tracks if the player is actively interacting.
 var controlling = false
 
+
+# New mechanic
+var matches_being_destroyed = false
+=======
 
 var sprite_destroyed_count  ={
 	"fries" = 0,
@@ -57,8 +55,9 @@ var sprite_destroyed_count  ={
 	
 }
 
+
 func _ready():
-	state = move
+	##state = move
 	setup_timers() # Connects timers to their respective callback functions and sets wait times
 	randomize() 
 	all_dots = make_2d_array() # Initializes the all_dots 2D array with null values
@@ -146,28 +145,41 @@ func is_in_grid(grid_position):
 func touch_input():
 	if Input.is_action_just_pressed("ui_touch"):
 		# If a touch begins (ui_touch pressed), records the grid position
-		if is_in_grid(pixel_to_grid(get_global_mouse_position().x,get_global_mouse_position().y)):
-			first_touch = pixel_to_grid(get_global_mouse_position().x,get_global_mouse_position().y)
-			controlling = true
-	if Input.is_action_just_released("ui_touch"):
-		# If a touch ends (ui_touch released), calculates the swipe direction and swaps dots
-		if is_in_grid(pixel_to_grid(get_global_mouse_position().x,get_global_mouse_position().y)) && controlling:
-			controlling = false
-			final_touch = pixel_to_grid(get_global_mouse_position().x,get_global_mouse_position().y )
-			touch_difference(first_touch, final_touch)
+		var touch_pos = get_global_mouse_position()
+		if is_in_grid(pixel_to_grid(touch_pos.x,touch_pos.y)):
+			first_touch = pixel_to_grid(touch_pos.x, touch_pos.y)
+			dot_one = all_dots[first_touch.x][first_touch.y]
+			if dot_one:
+				controlling = true
+	
+	elif Input.is_action_pressed("ui_touch") and controlling:
+		# Continuously track touch position
+		var current_touch = get_global_mouse_position()
+		var current_grid = pixel_to_grid(current_touch.x, current_touch.y)
+		if is_in_grid(current_grid) and current_grid != first_touch:
+			# If the touch moves to a new grid cell, swap dots
+			var direction = current_grid - first_touch
+			if abs(direction.x) + abs(direction.y) == 1:  # Ensure only orthogonal swaps
+				swap_dots(first_touch.x, first_touch.y, direction)
+				first_touch = current_grid  # Update the current grid position
+		
+	elif Input.is_action_just_released("ui_touch"):
+		controlling = false
+		dot_one = null
+		dot_two = null
 			
 func swap_dots(column, row, direction):
 	var first_dot = all_dots[column][row]
 	var other_dot = all_dots[column + direction.x][row + direction.y]
-	if first_dot != null && other_dot != null:
-		store_info(first_dot, other_dot, Vector2(column, row), direction)
-		state = wait
+	
+	if first_dot and other_dot:
+		# Upgrade grid positions
 		all_dots[column][row] = other_dot
 		all_dots[column + direction.x][row + direction.y] = first_dot
+		
+		# Swap positions visually
 		first_dot.move(grid_to_pixel(column + direction.x, row + direction.y))
 		other_dot.move(grid_to_pixel(column, row))
-		if !move_checked:
-			find_matches()
 		
 func store_info(first_dot, other_dot, place, direciton):
 	dot_one = first_dot
@@ -175,12 +187,6 @@ func store_info(first_dot, other_dot, place, direciton):
 	last_place = place
 	last_direction = direciton
 	pass
-		
-func swap_back():
-	if dot_one != null && dot_two != null:
-		swap_dots(last_place.x, last_place.y, last_direction)
-	state = move
-	move_checked = false
 	
 func touch_difference(grid_1, grid_2):
 	var difference = grid_2 - grid_1
@@ -196,20 +202,40 @@ func touch_difference(grid_1, grid_2):
 			swap_dots(grid_1.x, grid_1.y, Vector2(0, -1))
 
 func _process(_delta):
-	if state == move:
-		touch_input()
+	touch_input()
+	
+	# Run match detection after the player finishes their turn
+	if !controlling:
+		find_matches()
 	
 func find_matches():
+	if matches_being_destroyed:
+		return
+	
+	var found_match = false
 	for i in width:
 		for j in height:
 			if all_dots[i][j] != null:
 				var current_color = all_dots[i][j].color
-				if i > 0 && i < width -1:
-					if !is_piece_null(i - 1, j) && !is_piece_null(i + 1, j):
-						if all_dots[i - 1][j].color == current_color && all_dots[i + 1][j].color == current_color:
+				if i > 0 and i < width -1:
+					if !is_piece_null(i - 1, j) and !is_piece_null(i + 1, j):
+						if all_dots[i - 1][j].color == current_color and all_dots[i + 1][j].color == current_color:
 							match_and_dim(all_dots[i - 1][j])
 							match_and_dim(all_dots[i][j])
 							match_and_dim(all_dots[i + 1][j])
+							found_match = true
+				if j > 0 and j < height -1:
+					if !is_piece_null(i, j - 1) and !is_piece_null(i, j + 1):
+						if all_dots[i][j - 1].color == current_color and all_dots[i][j + 1].color == current_color:
+							match_and_dim(all_dots[i][j - 1])
+							match_and_dim(all_dots[i][j])
+							match_and_dim(all_dots[i][j + 1])
+							found_match = true
+	if found_match:
+		matches_being_destroyed = true # Prevent further matches from being found
+		print("Starting destroy timer....")
+		destroy_timer.start()
+		#destroy_matches()
 							
 							#detect current color to add value to the dictionary
 							if current_color == "blue":
@@ -264,19 +290,17 @@ func match_and_dim(item):
 	item.dim()
 
 func destroy_matches():
-	var was_matched = false
+	print("Destroying matches...")
+	#var was_matched = false
 	for i in width:
 		for j in height:
-			if all_dots[i][j] != null:
-				if all_dots[i][j].matched:
-					was_matched = true
-					all_dots[i][j].queue_free()
-					all_dots[i][j] = null
-	move_checked = true
-	if was_matched:
-		collapse_timer.start()
-	else:
-		swap_back()
+			if all_dots[i][j] != null and all_dots[i][j].matched:
+				#was_matched = true
+				all_dots[i][j].queue_free()
+				all_dots[i][j] = null
+	#if was_matched:
+	matches_being_destroyed = false
+	collapse_columns()
 					
 func collapse_columns():
 	for i in width:
@@ -315,5 +339,3 @@ func after_refill():
 					find_matches()
 					destroy_timer.start()
 					return
-	state = move
-	move_checked = false

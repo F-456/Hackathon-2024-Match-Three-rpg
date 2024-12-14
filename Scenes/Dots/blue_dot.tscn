@@ -1,10 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://dg8faho6jm1ry"]
 
-[ext_resource type="Texture2D" uid="uid://m84ie71yeaf0" path="res://Assets/blue.svg" id="1"]
 [ext_resource type="PackedScene" uid="uid://da0pp1wsvdhvy" path="res://Scenes/Dot.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://dfpltbn13b55q" path="res://Sprites/Pudding.png" id="2_ifwwm"]
 
-[node name="blue_dot" instance=ExtResource("2")]
+[node name="pudding" instance=ExtResource("2")]
 color = "blue"
 
 [node name="Sprite2D" parent="." index="0"]
-texture = ExtResource("1")
+scale = Vector2(5, 5)
+texture = ExtResource("2_ifwwm")
