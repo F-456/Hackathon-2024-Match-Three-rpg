@@ -47,6 +47,16 @@ var final_touch = Vector2(0,0)
 # Tracks if the player is actively interacting.
 var controlling = false
 
+
+var sprite_destroyed_count  ={
+	"fries" = 0,
+	"bomb" = 0,
+	"body_guard" = 0,
+	"virus" = 0,
+	"pudding" = 0,
+	
+}
+
 func _ready():
 	state = move
 	setup_timers() # Connects timers to their respective callback functions and sets wait times
@@ -111,6 +121,7 @@ func match_at(i, j, color):
 	if j > 1:
 		if all_dots[i][j - 1] != null && all_dots[i][j - 2] != null:
 			if all_dots[i][j - 1].color == color && all_dots[i][j - 2].color == color:
+				
 				return true
 	pass
 
@@ -199,12 +210,48 @@ func find_matches():
 							match_and_dim(all_dots[i - 1][j])
 							match_and_dim(all_dots[i][j])
 							match_and_dim(all_dots[i + 1][j])
+							
+							#detect current color to add value to the dictionary
+							if current_color == "blue":
+								sprite_destroyed_count["pudding"] += 1
+								print ("pudding number is now %d" % sprite_destroyed_count["pudding"])
+							if current_color == "green":
+								sprite_destroyed_count["bomb"] += 1
+								print ("bomb number is now %d" % sprite_destroyed_count["bomb"])
+							if current_color == "pink":
+								sprite_destroyed_count["fries"] += 1
+								print ("fries number is now %d" % sprite_destroyed_count["fries"])
+							if current_color == "red":
+								sprite_destroyed_count["virus"] += 1
+								print ("virus number is now %d" % sprite_destroyed_count["virus"])
+							if current_color == "yellow":
+								sprite_destroyed_count["body_guard"] += 1
+								print ("body guard number is now %d" % sprite_destroyed_count["body_guard"])
+								
+								
+							
 				if j > 0 && j < height -1:
 					if !is_piece_null(i, j - 1) && !is_piece_null(i, j + 1):
 						if all_dots[i][j - 1].color == current_color && all_dots[i][j + 1].color == current_color:
 							match_and_dim(all_dots[i][j - 1])
 							match_and_dim(all_dots[i][j])
 							match_and_dim(all_dots[i][j + 1])
+							if current_color == "blue":
+								sprite_destroyed_count["pudding"] += 1
+								print ("pudding number is now %d" % sprite_destroyed_count["pudding"])
+							if current_color == "green":
+								sprite_destroyed_count["bomb"] += 1
+								print ("bomb number is now %d" % sprite_destroyed_count["bomb"])
+							if current_color == "pink":
+								sprite_destroyed_count["fries"] += 1
+								print ("fries number is now %d" % sprite_destroyed_count["fries"])
+							if current_color == "red":
+								sprite_destroyed_count["virus"] += 1
+								print ("virus number is now %d" % sprite_destroyed_count["virus"])
+							if current_color == "yellow":
+								sprite_destroyed_count["body_guard"] += 1
+								print ("body guard number is now %d" % sprite_destroyed_count["body_guard"])
+								
 	destroy_timer.start()
 
 func is_piece_null(column, row):
