@@ -1,18 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://dshkav45d6omm"]
+[gd_scene load_steps=3 format=3 uid="uid://dshkav45d6omm"]
 
 [ext_resource type="PackedScene" uid="uid://da0pp1wsvdhvy" path="res://Scenes/Dot.tscn" id="2"]
-
 [ext_resource type="Texture2D" uid="uid://dmd6bp62at4qh" path="res://Sprites/virus.png" id="2_im3gu"]
-[ext_resource type="Script" path="res://sprite_2d.gd" id="3_xvh1f"]
 
 [node name="virus" instance=ExtResource("2")]
 color = "red"
 
 [node name="Sprite2D" parent="." index="0"]
-
 scale = Vector2(5, 5)
 texture = ExtResource("2_im3gu")
-
-texture = ExtResource("2_13odl")
-script = ExtResource("3_xvh1f")
-

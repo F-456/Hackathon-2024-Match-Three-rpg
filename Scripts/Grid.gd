@@ -20,9 +20,16 @@ extends Node2D
 	preload("res://Scenes/Dots/yellow_dot.tscn"),
 ]
 
+@onready var timer_label = $"../CanvasLayer/Timer_label"
+
 var destroy_timer = Timer.new()
 var collapse_timer = Timer.new()
 var refill_timer = Timer.new()
+var match_timer = Timer.new()
+
+var match_time_limit = 7 # Time limit in seconds
+var time_remaining = match_time_limit # Remaining time counter
+var match_timer_running = false # To check if the timer is active
 
 var all_dots = []
 
@@ -32,7 +39,6 @@ var dot_two = null
 
 var last_place = Vector2(0,0)
 var last_direction = Vector2(0,0)
-## var move_checked = false
 
 # Track the grid positions of the player's initial and final touch during a swipe
 var first_touch = Vector2(0,0)
@@ -44,7 +50,6 @@ var controlling = false
 
 # New mechanic
 var matches_being_destroyed = false
-=======
 
 var sprite_destroyed_count  ={
 	"fries" = 0,
@@ -63,6 +68,12 @@ func _ready():
 	all_dots = make_2d_array() # Initializes the all_dots 2D array with null values
 	spawn_dots() # Spawns dots into the grid.
 	
+	# Initialize match timer
+	match_timer.connect("timeout", Callable(self, "on_match_timer_timeout"))
+	match_timer.set_one_shot(true)
+	timer_label.text = "Time Remaining: %d" % int(time_remaining)
+	add_child(match_timer)
+	
 func setup_timers():
 	# Manage delays between destroying matches, collapsing columns, and refilling the grid
 	destroy_timer.connect("timeout", Callable(self, "destroy_matches"))
@@ -79,6 +90,19 @@ func setup_timers():
 	refill_timer.set_one_shot(true)
 	refill_timer.set_wait_time(0.2)
 	add_child(refill_timer)
+
+func start_match_timer():
+	time_remaining = match_time_limit
+	match_timer.set_wait_time(time_remaining)
+	match_timer.start()
+	match_timer_running = true
+	print("7 sec remaining")
+
+func stop_match_timer():
+	if match_timer.is_stopped():
+		return
+	match_timer.stop()
+	print("Match timer stopped")
 	
 func is_in_array(array, item):
 	for i in array.size():
@@ -151,6 +175,7 @@ func touch_input():
 			dot_one = all_dots[first_touch.x][first_touch.y]
 			if dot_one:
 				controlling = true
+				start_match_timer()
 	
 	elif Input.is_action_pressed("ui_touch") and controlling:
 		# Continuously track touch position
@@ -165,6 +190,7 @@ func touch_input():
 		
 	elif Input.is_action_just_released("ui_touch"):
 		controlling = false
+		stop_match_timer()
 		dot_one = null
 		dot_two = null
 			
@@ -201,12 +227,25 @@ func touch_difference(grid_1, grid_2):
 		elif difference.y < 0:
 			swap_dots(grid_1.x, grid_1.y, Vector2(0, -1))
 
-func _process(_delta):
+func _process(delta):
 	touch_input()
 	
 	# Run match detection after the player finishes their turn
 	if !controlling:
 		find_matches()
+	
+	if match_timer_running:
+		time_remaining -= delta
+		if time_remaining > 0:
+			# Update the label text
+			timer_label.text = "Time remaining: %d" % int(time_remaining)
+		else:
+			# Timer expired
+			match_timer_running = false
+			time_remaining = 0 
+			timer_label.text = "Time's Up!"
+			on_match_timer_timeout()
+		
 	
 func find_matches():
 	if matches_being_destroyed:
@@ -224,18 +263,6 @@ func find_matches():
 							match_and_dim(all_dots[i][j])
 							match_and_dim(all_dots[i + 1][j])
 							found_match = true
-				if j > 0 and j < height -1:
-					if !is_piece_null(i, j - 1) and !is_piece_null(i, j + 1):
-						if all_dots[i][j - 1].color == current_color and all_dots[i][j + 1].color == current_color:
-							match_and_dim(all_dots[i][j - 1])
-							match_and_dim(all_dots[i][j])
-							match_and_dim(all_dots[i][j + 1])
-							found_match = true
-	if found_match:
-		matches_being_destroyed = true # Prevent further matches from being found
-		print("Starting destroy timer....")
-		destroy_timer.start()
-		#destroy_matches()
 							
 							#detect current color to add value to the dictionary
 							if current_color == "blue":
@@ -253,15 +280,15 @@ func find_matches():
 							if current_color == "yellow":
 								sprite_destroyed_count["body_guard"] += 1
 								print ("body guard number is now %d" % sprite_destroyed_count["body_guard"])
-								
-								
-							
-				if j > 0 && j < height -1:
-					if !is_piece_null(i, j - 1) && !is_piece_null(i, j + 1):
-						if all_dots[i][j - 1].color == current_color && all_dots[i][j + 1].color == current_color:
+				if j > 0 and j < height -1:
+					if !is_piece_null(i, j - 1) and !is_piece_null(i, j + 1):
+						if all_dots[i][j - 1].color == current_color and all_dots[i][j + 1].color == current_color:
 							match_and_dim(all_dots[i][j - 1])
 							match_and_dim(all_dots[i][j])
 							match_and_dim(all_dots[i][j + 1])
+							found_match = true
+							
+							#detect current color to add value to the dictionary
 							if current_color == "blue":
 								sprite_destroyed_count["pudding"] += 1
 								print ("pudding number is now %d" % sprite_destroyed_count["pudding"])
@@ -277,8 +304,11 @@ func find_matches():
 							if current_color == "yellow":
 								sprite_destroyed_count["body_guard"] += 1
 								print ("body guard number is now %d" % sprite_destroyed_count["body_guard"])
-								
-	destroy_timer.start()
+							
+	if found_match:
+		matches_being_destroyed = true # Prevent further matches from being found
+		print("Starting destroy timer....")
+		destroy_timer.start()
 
 func is_piece_null(column, row):
 	if all_dots[column][row] == null:
@@ -339,3 +369,7 @@ func after_refill():
 					find_matches()
 					destroy_timer.start()
 					return
+
+func on_match_timer_timeout():
+	controlling = false
+	print("Match timer ended")
