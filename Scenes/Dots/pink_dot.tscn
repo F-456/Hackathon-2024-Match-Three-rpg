@@ -1,10 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://dccnad86ia8e6"]
 
 [ext_resource type="PackedScene" uid="uid://da0pp1wsvdhvy" path="res://Scenes/Dot.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://cq30wobxufke0" path="res://Assets/pink.svg" id="2_2gk4y"]
+[ext_resource type="Texture2D" uid="uid://cgkotgkrilmuw" path="res://Sprites/Mcdonald.png" id="2_cjg07"]
 
-[node name="pink_dot" instance=ExtResource("2")]
+[node name="Fries" instance=ExtResource("2")]
 color = "pink"
 
 [node name="Sprite2D" parent="." index="0"]
-texture = ExtResource("2_2gk4y")
+scale = Vector2(5, 5)
+texture = ExtResource("2_cjg07")

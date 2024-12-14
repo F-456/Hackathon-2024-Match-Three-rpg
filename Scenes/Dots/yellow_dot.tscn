@@ -1,10 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://dhw8ict00vn3n"]
 
-[ext_resource type="Texture2D" uid="uid://de6nwjlny77kh" path="res://Assets/yellow.svg" id="1"]
 [ext_resource type="PackedScene" uid="uid://da0pp1wsvdhvy" path="res://Scenes/Dot.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://bao8ceubbg10a" path="res://Sprites/Bodyguard.png" id="2_jpunh"]
 
-[node name="yellow_dot" instance=ExtResource("2")]
+[node name="bodyguard" instance=ExtResource("2")]
 color = "yellow"
 
 [node name="Sprite2D" parent="." index="0"]
-texture = ExtResource("1")
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("2_jpunh")
