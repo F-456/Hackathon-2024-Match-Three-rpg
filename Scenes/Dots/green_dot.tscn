@@ -1,10 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://n6ggpuy3a072"]
 
 [ext_resource type="PackedScene" uid="uid://da0pp1wsvdhvy" path="res://Scenes/Dot.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://boc3jkh5y0vuo" path="res://Assets/green.svg" id="2_f0bri"]
+[ext_resource type="Texture2D" uid="uid://ctqlag0iuuibg" path="res://Sprites/Nuclear bomb.png" id="2_5ex6v"]
 
-[node name="green_dot" instance=ExtResource("2")]
+[node name="bomb" instance=ExtResource("2")]
 color = "green"
 
 [node name="Sprite2D" parent="." index="0"]
-texture = ExtResource("2_f0bri")
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("2_5ex6v")

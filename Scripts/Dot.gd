@@ -1,5 +1,6 @@
 extends Node2D
 
+# This exported variable stores the color of the dot.
 @export var color = ""
 @onready var sprite = get_node("Sprite2D")
 var matched = false
