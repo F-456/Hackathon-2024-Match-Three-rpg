@@ -365,15 +365,14 @@ func match_and_dim(item):
 
 func destroy_matches():
 	var was_matched = false
-	destroyed_count = 0
+	
 	for i in width:
 		for j in height:
 			if all_dots[i][j] != null and all_dots[i][j].matched:
-				if all_dots[i][j].matched:
-					destroyed_count += 1
 					was_matched = true
 					all_dots[i][j].queue_free()
 					all_dots[i][j] = null
+					destroyed_count += 1
 					print (destroyed_count)
 					
 	if was_matched:
