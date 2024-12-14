@@ -265,6 +265,22 @@ func find_matches():
 							match_and_dim(all_dots[i][j])
 							match_and_dim(all_dots[i + 1][j])
 							found_match = true
+							#detect current color to add value to the dictionary
+							if current_color == "blue":
+								sprite_destroyed_count["pudding"] += destroyed_count
+								print ("pudding number is now %d" % sprite_destroyed_count["pudding"])
+							if current_color == "green":
+								sprite_destroyed_count["bomb"] += destroyed_count
+								print ("bomb number is now %d" % sprite_destroyed_count["bomb"])
+							if current_color == "pink":
+								sprite_destroyed_count["fries"] += destroyed_count
+								print ("fries number is now %d" % sprite_destroyed_count["fries"])
+							if current_color == "red":
+								sprite_destroyed_count["virus"] += destroyed_count
+								print ("virus number is now %d" % sprite_destroyed_count["virus"])
+							if current_color == "yellow":
+								sprite_destroyed_count["body_guard"] += destroyed_count
+								print ("body guard number is now %d" % sprite_destroyed_count["body_guard"])
 				if j > 0 and j < height -1:
 					if !is_piece_null(i, j - 1) and !is_piece_null(i, j + 1):
 						if all_dots[i][j - 1].color == current_color and all_dots[i][j + 1].color == current_color:
@@ -272,12 +288,6 @@ func find_matches():
 							match_and_dim(all_dots[i][j])
 							match_and_dim(all_dots[i][j + 1])
 							found_match = true
-	if found_match:
-		matches_being_destroyed = true # Prevent further matches from being found
-		print("Starting destroy timer....")
-		destroy_timer.start()
-		#destroy_matches()
-							
 							#detect current color to add value to the dictionary
 							if current_color == "blue":
 								sprite_destroyed_count["pudding"] += destroyed_count
@@ -295,31 +305,14 @@ func find_matches():
 								sprite_destroyed_count["body_guard"] += destroyed_count
 								print ("body guard number is now %d" % sprite_destroyed_count["body_guard"])
 								
-								
-							
-				if j > 0 && j < height -1:
-					if !is_piece_null(i, j - 1) && !is_piece_null(i, j + 1):
-						if all_dots[i][j - 1].color == current_color && all_dots[i][j + 1].color == current_color:
-							match_and_dim(all_dots[i][j - 1])
-							match_and_dim(all_dots[i][j])
-							match_and_dim(all_dots[i][j + 1])
-							if current_color == "blue":
-								sprite_destroyed_count["pudding"] += destroyed_count
-								print ("pudding number is now %d" % sprite_destroyed_count["pudding"])
-							if current_color == "green":
-								sprite_destroyed_count["bomb"] += destroyed_count
-								print ("bomb number is now %d" % sprite_destroyed_count["bomb"])
-							if current_color == "pink":
-								sprite_destroyed_count["fries"] += destroyed_count
-								print ("fries number is now %d" % sprite_destroyed_count["fries"])
-							if current_color == "red":
-								sprite_destroyed_count["virus"] += destroyed_count
-								print ("virus number is now %d" % sprite_destroyed_count["virus"])
-							if current_color == "yellow":
-								sprite_destroyed_count["body_guard"] += destroyed_count
-								print ("body guard number is now %d" % sprite_destroyed_count["body_guard"])
-								
-	destroy_timer.start()
+						
+	if found_match:
+		matches_being_destroyed = true # Prevent further matches from being found
+		print("Starting destroy timer....")
+		destroy_timer.start()
+		destroyed_count = 0 #reset the count to zero
+		#destroy_matches()
+
 	update_labels()
 	
 
@@ -333,31 +326,22 @@ func match_and_dim(item):
 	item.dim()
 
 func destroy_matches():
-
 	var was_matched = false
 	destroyed_count = 0
 	for i in width:
 		for j in height:
-			if all_dots[i][j] != null:
+			if all_dots[i][j] != null and all_dots[i][j].matched:
 				if all_dots[i][j].matched:
 					destroyed_count += 1
 					was_matched = true
 					all_dots[i][j].queue_free()
 					all_dots[i][j] = null
 					print (destroyed_count)
-	move_checked = true
+					
 	if was_matched:
 		collapse_timer.start()
-	else:
-		swap_back()
 	print("Destroying matches...")
 	#var was_matched = false
-	for i in width:
-		for j in height:
-			if all_dots[i][j] != null and all_dots[i][j].matched:
-				#was_matched = true
-				all_dots[i][j].queue_free()
-				all_dots[i][j] = null
 	#if was_matched:
 	matches_being_destroyed = false
 	collapse_columns()
