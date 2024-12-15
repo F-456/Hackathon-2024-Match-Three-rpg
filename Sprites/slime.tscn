@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://ggxxxb0xwwy0"]
+[gd_scene load_steps=3 format=3 uid="uid://bcvc04uobpawp"]
 
-[ext_resource type="Texture2D" path="res://Sprites/slime.png" id="1_7dw2u"]
+[ext_resource type="Texture2D" uid="uid://b14vfeglp3t6y" path="res://Sprites/slime.png" id="1_7dw2u"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_3j3xb"]
 animations = [{
