@@ -83,28 +83,14 @@ func update_sprite_destroyed_count(current_color):
 	if current_color in color_map:
 		sprite_destroyed_count[color_map[current_color]] += 1
 		print("%s number is now %d" % [color_map[current_color], sprite_destroyed_count[color_map[current_color]]])
-	#if current_color == "blue":
-		#sprite_destroyed_count["pudding"] += destroyed_count
-		#print ("pudding number is now %d" % sprite_destroyed_count["pudding"])
-	#elif current_color == "green":
-		#sprite_destroyed_count["bomb"] += destroyed_count
-		#print ("bomb number is now %d" % sprite_destroyed_count["bomb"])
-	#elif current_color == "pink":
-		#sprite_destroyed_count["fries"] += destroyed_count
-		#print ("fries number is now %d" % sprite_destroyed_count["fries"])
-	#elif current_color == "red":
-		#sprite_destroyed_count["virus"] += destroyed_count
-		#print ("virus number is now %d" % sprite_destroyed_count["virus"])
-	#elif current_color == "yellow":
-		#sprite_destroyed_count["body_guard"] += destroyed_count
-		#print ("body guard number is now %d" % sprite_destroyed_count["body_guard"])
+	
 
 func update_labels():
-	label_fries.text = "Fries: %d" %sprite_destroyed_count["fries"]
-	label_bomb.text = "Bomb: %d" %sprite_destroyed_count["bomb"]
-	label_bodyguard.text = "Body Guard:  %d" %sprite_destroyed_count["body_guard"]
-	label_virus.text = "Virus:  %d" %sprite_destroyed_count["virus"]
-	label_pudding.text = "Pudding:  %d" %sprite_destroyed_count["pudding"]
+	label_fries.text = "%d" %sprite_destroyed_count["fries"]
+	label_bomb.text = "%d" %sprite_destroyed_count["bomb"]
+	label_bodyguard.text = "%d" %sprite_destroyed_count["body_guard"]
+	label_virus.text = "%d" %sprite_destroyed_count["virus"]
+	label_pudding.text = "%d" %sprite_destroyed_count["pudding"]
 
 var destroyed_count = 0
 var label_display 
@@ -358,14 +344,14 @@ func destroy_matches():
 	for i in width:
 		for j in height:
 			if all_dots[i][j] != null and all_dots[i][j].matched:
-
-					was_matched = true
-					all_dots[i][j].queue_free()
-					all_dots[i][j] = null
-					destroyed_count += 1
-					print (destroyed_count)
-					check_enemy_elimination()
-
+				var color = all_dots[i][j].color
+				update_sprite_destroyed_count(color) # Call here with the correct color
+				destroyed_count += 1
+				was_matched = true
+				all_dots[i][j].queue_free()
+				all_dots[i][j] = null
+				#print (destroyed_count)
+				check_enemy_elimination()
 					
 	if was_matched:
 		collapse_timer.start()
@@ -405,23 +391,6 @@ func refill_columns():
 				all_dots[i][j] = dot
 
 
-#func refill_columns():
-	#for i in width:
-		#for j in height:
-			#if all_dots[i][j] == null:
-				#var rand = floor(randf_range(0, possible_dots.size()))
-				#var dot = possible_dots[rand].instantiate()
-				#var loops = 0
-				#while (match_at(i, j, dot.color) && loops < 100):
-					#rand = floor(randf_range(0,possible_dots.size()))
-					#loops += 1
-					#print (possible_dots.size())
-					#dot = possible_dots[rand].instantiate()
-				#add_child(dot)
-				#dot.position = grid_to_pixel(i, j - y_offset)
-				#dot.move(grid_to_pixel(i,j))
-				#all_dots[i][j] = dot
-	#after_refill()
 				
 func after_refill():
 	for i in width:
