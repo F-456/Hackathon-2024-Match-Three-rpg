@@ -15,8 +15,10 @@ extends Node2D
 @export var y_offset: int
 
 # Starting positions of the grid, calculated from the window size.
-@onready var x_start = ((get_window().size.x / 2.0) - ((width/2.0) * offset ) + (offset / 2))
-@onready var y_start = ((get_window().size.y / 2.0) + ((height/2.0) * offset ) - (offset / 2))
+@onready var x_start = (get_window().size.x - (width * offset) - offset / 2)
+@onready var y_start = ((get_window().size.y / 2.0) + ((height / 2.0) * offset) - (offset / 2))
+
+
 
 @onready var possible_dots = [
 	preload("res://Scenes/Dots/blue_dot.tscn"),
@@ -114,6 +116,12 @@ func _ready():
 	randomize() 
 	all_dots = make_2d_array() # Initializes the all_dots 2D array with null values
 	spawn_dots() # Spawns dots into the grid.
+	randomize()
+	update_sprite_requirements_for_enemy("Slime")
+	update_sprite_requirements_for_enemy("Bat")
+	update_sprite_requirements_for_enemy("Ghost")
+	update_sprite_requirements_for_enemy("Zombie")
+	display_sprites_above_enemy()
 	
 	# Initialize match timer
 	match_timer.connect("timeout", Callable(self, "on_match_timer_timeout"))
@@ -357,6 +365,16 @@ func destroy_matches():
 				all_dots[i][j].queue_free()
 				all_dots[i][j] = null
 				#print (destroyed_count)
+	
+	for i in width:
+		for j in height:
+			if all_dots[i][j] != null and all_dots[i][j].matched:
+					was_matched = true
+					all_dots[i][j].queue_free()
+					all_dots[i][j] = null
+					destroyed_count += 1
+					print (destroyed_count)
+					check_enemy_elimination()
 					
 	if was_matched:
 		collapse_timer.start()
@@ -422,6 +440,82 @@ func after_refill():
 					find_matches()
 					destroy_timer.start()
 					return
+						
+					
+
+var bosses = {
+	"Slime" : {"Pudding" : 4, "Bomb" : 4},
+	"Zombie": {"Fries": 5, "Virus": 3},
+	"Ghost": {"Body Guard": 6, "Virus": 5},
+	"Bat": {"Pudding": 3, "Fries": 4}
+}
+
+func on_sprite_destroyed(sprite_type):
+	sprite_destroyed_count[sprite_type] = sprite_destroyed_count.get(sprite_type, 0) + 1
+	print("Destroyed sprite: %s, Total destroyed: %d" % [sprite_type, sprite_destroyed_count[sprite_type]])
+	
+
+
+# Create sprite nodes for each enemy requirement and display remaining requirements
+func display_sprites_above_enemy():
+	var enemy_names = ["Slime", "Zombie", "Bat", "Ghost"]
+	var offset_y = 0  # This will help to position each sprite vertically above the enemy
+	
+	for enemy_name in enemy_names:
+		var enemy = get_node(enemy_name)  
+		if enemy:
+			var enemy_position = enemy.position  # Access the position of the enemy
+			var enemy_requirements = bosses[enemy_name]  # Get the enemy's requirements from the bosses dictionary
+			for sprite_type in enemy_requirements.keys():
+				var required = enemy_requirements[sprite_type]  
+				var destroyed = sprite_destroyed_count.get(sprite_type, 0)  # The destroyed amount of this sprite
+				var remaining = max(0, required - destroyed)  # Calculate remaining sprites required
+				var sprite = Sprite2D.new()
+				sprite.texture = load("res://sprites/" + sprite_type + ".png")  # Path to the sprite texture
+				sprite.position = enemy_position + Vector2(0, -30 - offset_y)  # Position it above the enemy with a vertical offset
+				add_child(sprite)  # Add sprite to the scene
+				var label = Label.new()
+				label.text = str(remaining)  # Display remaining requirement
+				label.position = sprite.position + Vector2(0, -20)  # Position label above the sprite
+				add_child(label)  # Add label to the scene
+				offset_y += 40  # Adjust this value to space the sprites appropriately
+
+# This function will update the required sprite count for each enemy
+func update_sprite_requirements_for_enemy(enemy_name):
+	var enemy_requirements = bosses[enemy_name]  # Replace 'bosses' with 'enemies' if that's the correct variable name
+	
+	for sprite_type in enemy_requirements.keys():
+		enemy_requirements[sprite_type] = int(randf_range(1, 100))  # Randomly change the required number for each sprite
+		print("Updated requirement for %s: %s = %d" % [enemy_name, sprite_type, enemy_requirements[sprite_type]])
+		
+
+		
+func check_enemy_elimination():
+	var enemies_to_remove = []  # Create a list to store defeated bosses
+	for enemy_name in bosses.keys():
+		var enemy_requirements = bosses[enemy_name]
+		var enemy_defeated = true  # Assume the boss is defeated unless proven otherwise
+		print("Checking enemy: %s" % enemy_name)
+		for sprite_type in enemy_requirements.keys():
+			var required = enemy_requirements[sprite_type]  # The required amount of sprite for the boss
+			var destroyed = sprite_destroyed_count.get(sprite_type, 0)  # The destroyed amount of sprite
+			var remaining = required - destroyed  # The remaining amount needed for the boss to be defeated
+			print("  %s: required=%d, destroyed=%d, remaining=%d" % [sprite_type, required, destroyed, remaining])
+			
+			if remaining > 0:
+				enemy_defeated = false
+				break
+		if enemy_defeated:
+			print("Enemy %s has been defeated!" % enemy_name)
+			enemies_to_remove.append(enemy_name)  # Add the defeated boss to the removal list
+		else:
+			print("Enemy %s is not yet defeated" % enemy_name)
+	for enemy_name in enemies_to_remove:
+		bosses.erase(enemy_name)
+
+
+
+	
 
 func on_match_timer_timeout():
 	controlling = false
