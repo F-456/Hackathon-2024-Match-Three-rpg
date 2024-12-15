@@ -189,7 +189,6 @@ root_node = NodePath("../Xi")
 libraries = {
 "": SubResource("AnimationLibrary_pgejq")
 }
-script = ExtResource("12_gp0hg")
 
 [node name="Xi_sound" type="AudioStreamPlayer2D" parent="Grid"]
 stream = ExtResource("6_6ig1d")

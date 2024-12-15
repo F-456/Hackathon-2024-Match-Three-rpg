@@ -1,5 +1,4 @@
 extends Node2D
-
 @onready var label_pudding: Label = $"../labelPudding"
 @onready var label_fries: Label = $"../labelFries"
 @onready var label_bomb: Label = $"../labelBomb"
@@ -62,6 +61,8 @@ var controlling = false
 
 # New mechanic
 var matches_being_destroyed = false
+var new_destroyed_count = 0
+var number_of_destroyed = 0
 
 var sprite_destroyed_count  ={
 	"fries" = 0,
@@ -72,18 +73,35 @@ var sprite_destroyed_count  ={
 	
 }
 
-func update_sprite_destroyed_count(current_color):
-	var color_map = {
+var color_map = {
 		"blue": "pudding",
 		"green": "bomb",
 		"pink": "fries",
 		"red": "virus",
 		"yellow": "body_guard"
 	}
+
+func update_sprite_destroyed_count(current_color):
+
 	if current_color in color_map:
 		sprite_destroyed_count[color_map[current_color]] += 1
+		
 		print("%s number is now %d" % [color_map[current_color], sprite_destroyed_count[color_map[current_color]]])
 	
+	
+@onready var anim_player = $Trump2 
+@onready var anim_player2 = $XI2
+func number_of_destroy (color):
+	
+	if destroyed_count >= 4 and color == "pink" :
+		anim_player.play_animation_trump()
+		$Trump_sound.play()
+		
+	if destroyed_count >= 4 and color == "red" :
+		anim_player2.play_animation_xi()
+		$Xi_sound.play()
+		
+		
 
 func update_labels():
 	label_fries.text = "%d" %sprite_destroyed_count["fries"]
@@ -323,7 +341,7 @@ func find_matches():
 	if found_match:
 		matches_being_destroyed = true # Prevent further matches from being found
 		destroy_timer.start()
-
+	
 		destroyed_count = 0 #reset the count to zero
 		#destroy_matches()
 	#update_labels()
@@ -336,27 +354,33 @@ func is_piece_null(column, row):
 func match_and_dim(item):
 	item.matched = true
 	item.dim()
-
+var color
 func destroy_matches():
 	var was_matched = false
 	destroyed_count = 0
+	
 
 	for i in width:
 		for j in height:
 			if all_dots[i][j] != null and all_dots[i][j].matched:
-				var color = all_dots[i][j].color
+				color = all_dots[i][j].color
 				update_sprite_destroyed_count(color) # Call here with the correct color
 				destroyed_count += 1
+				#print(destroyed_count)
+				
+
 				was_matched = true
 				all_dots[i][j].queue_free()
 				all_dots[i][j] = null
 				#print (destroyed_count)
+				
 				check_enemy_elimination()
 					
 	if was_matched:
 		collapse_timer.start()
 
 	matches_being_destroyed = false
+	number_of_destroy(color)
 	update_labels()
 	collapse_columns()
 
@@ -412,7 +436,7 @@ var bosses = {
 
 func on_sprite_destroyed(sprite_type):
 	sprite_destroyed_count[sprite_type] = sprite_destroyed_count.get(sprite_type, 0) + 1
-	print("Destroyed sprite: %s, Total destroyed: %d" % [sprite_type, sprite_destroyed_count[sprite_type]])
+	#print("Destroyed sprite: %s, Total destroyed: %d" % [sprite_type, sprite_destroyed_count[sprite_type]])
 	
 
 
@@ -446,7 +470,7 @@ func update_sprite_requirements_for_enemy(enemy_name):
 	
 	for sprite_type in enemy_requirements.keys():
 		enemy_requirements[sprite_type] = int(randf_range(1, 100))  # Randomly change the required number for each sprite
-		print("Updated requirement for %s: %s = %d" % [enemy_name, sprite_type, enemy_requirements[sprite_type]])
+		#print("Updated requirement for %s: %s = %d" % [enemy_name, sprite_type, enemy_requirements[sprite_type]])
 		
 
 		
@@ -455,21 +479,22 @@ func check_enemy_elimination():
 	for enemy_name in bosses.keys():
 		var enemy_requirements = bosses[enemy_name]
 		var enemy_defeated = true  # Assume the boss is defeated unless proven otherwise
-		print("Checking enemy: %s" % enemy_name)
+		#print("Checking enemy: %s" % enemy_name)
 		for sprite_type in enemy_requirements.keys():
 			var required = enemy_requirements[sprite_type]  # The required amount of sprite for the boss
 			var destroyed = sprite_destroyed_count.get(sprite_type, 0)  # The destroyed amount of sprite
 			var remaining = required - destroyed  # The remaining amount needed for the boss to be defeated
-			print("  %s: required=%d, destroyed=%d, remaining=%d" % [sprite_type, required, destroyed, remaining])
+			#print("  %s: required=%d, destroyed=%d, remaining=%d" % [sprite_type, required, destroyed, remaining])
 			
 			if remaining > 0:
 				enemy_defeated = false
 				break
 		if enemy_defeated:
-			print("Enemy %s has been defeated!" % enemy_name)
+			#print("Enemy %s has been defeated!" % enemy_name)
 			enemies_to_remove.append(enemy_name)  # Add the defeated boss to the removal list
 		else:
-			print("Enemy %s is not yet defeated" % enemy_name)
+			pass
+			#print("Enemy %s is not yet defeated" % enemy_name)
 	for enemy_name in enemies_to_remove:
 		bosses.erase(enemy_name)
 
