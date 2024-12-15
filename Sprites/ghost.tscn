@@ -1,28 +1,28 @@
-[gd_scene load_steps=7 format=3 uid="uid://31ijnigrhba1"]
+[gd_scene load_steps=7 format=3 uid="uid://hrmd6jq18ovl"]
 
-[ext_resource type="Texture2D" uid="uid://rh5x3qmenk7x" path="res://Sprites/boo1.png" id="1_tjtpw"]
-[ext_resource type="Texture2D" uid="uid://bwhu0i63bc16g" path="res://Sprites/boo2.png" id="2_d4m2t"]
-[ext_resource type="Texture2D" uid="uid://cdnbwrd6u5o5t" path="res://Sprites/boo3.png" id="3_b4041"]
-[ext_resource type="Texture2D" uid="uid://0rhmvwdjwrcl" path="res://Sprites/boo4.png" id="4_ob6sn"]
-[ext_resource type="Texture2D" uid="uid://cwpkspxlspw4k" path="res://Sprites/boo5.png" id="5_w70h5"]
+[ext_resource type="Texture2D" path="res://Sprites/Ghost2.png" id="1_lmye7"]
+[ext_resource type="Texture2D" path="res://Sprites/Ghost1.png" id="2_qd4ds"]
+[ext_resource type="Texture2D" path="res://Sprites/Ghost3.png" id="3_iovx7"]
+[ext_resource type="Texture2D" path="res://Sprites/Ghost4.png" id="4_mmyg4"]
+[ext_resource type="Texture2D" path="res://Sprites/Ghost5.png" id="5_u6bjb"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_4gsbe"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_tjtpw")
+"texture": ExtResource("1_lmye7")
 }, {
 "duration": 1.0,
-"texture": ExtResource("2_d4m2t")
+"texture": ExtResource("2_qd4ds")
 }, {
 "duration": 1.0,
-"texture": ExtResource("3_b4041")
+"texture": ExtResource("3_iovx7")
 }, {
 "duration": 1.0,
-"texture": ExtResource("4_ob6sn")
+"texture": ExtResource("4_mmyg4")
 }, {
 "duration": 1.0,
-"texture": ExtResource("5_w70h5")
+"texture": ExtResource("5_u6bjb")
 }],
 "loop": true,
 "name": &"default",
@@ -34,7 +34,6 @@ animations = [{
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_4gsbe")
-frame = 1
-frame_progress = 0.106502
+frame_progress = 0.0146786
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
