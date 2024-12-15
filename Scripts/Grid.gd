@@ -358,23 +358,14 @@ func destroy_matches():
 	for i in width:
 		for j in height:
 			if all_dots[i][j] != null and all_dots[i][j].matched:
-				var color = all_dots[i][j].color
-				update_sprite_destroyed_count(color) # Call here with the correct color
-				destroyed_count += 1
-				was_matched = true
-				all_dots[i][j].queue_free()
-				all_dots[i][j] = null
-				#print (destroyed_count)
-	
-	for i in width:
-		for j in height:
-			if all_dots[i][j] != null and all_dots[i][j].matched:
+
 					was_matched = true
 					all_dots[i][j].queue_free()
 					all_dots[i][j] = null
 					destroyed_count += 1
 					print (destroyed_count)
 					check_enemy_elimination()
+
 					
 	if was_matched:
 		collapse_timer.start()
