@@ -1,75 +1,6 @@
 [gd_scene load_steps=23 format=3 uid="uid://dn6n3gl1d74hd"]
 
 [ext_resource type="Script" path="res://Scripts/Grid.gd" id="1"]
-<<<<<<< HEAD
-[ext_resource type="Texture2D" uid="uid://dofkjq212md4k" path="res://Background/ai-generated-role-playing-rpg-game-background-free-photo.jpg" id="2_cpa15"]
-[ext_resource type="Texture2D" uid="uid://cu1llmox44mlj" path="res://Sprites/zombie1.png" id="3_b1pwk"]
-[ext_resource type="AudioStream" uid="uid://ihy7t4spn85t" path="res://SFX/move sound effect.MP3" id="3_cq0i5"]
-[ext_resource type="Texture2D" uid="uid://sjbhp8cnay5o" path="res://Sprites/zombie2.png" id="4_1pbmn"]
-[ext_resource type="AudioStream" uid="uid://dexj70i8hhvin" path="res://SFX/Immediate Music - Protectors of Truth (NU EPIQ).mp3" id="4_g5lo7"]
-[ext_resource type="Texture2D" uid="uid://bc86oekfbrr3l" path="res://Sprites/zombie3.png" id="5_uha4r"]
-[ext_resource type="AudioStream" uid="uid://c84hi614itc4x" path="res://SFX/death sound effect.MP3" id="7_eduft"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_1bge5"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("5_uha4r")
-}, {
-"duration": 1.0,
-"texture": ExtResource("4_1pbmn")
-}, {
-"duration": 1.0,
-"texture": ExtResource("3_b1pwk")
-}],
-"loop": true,
-"name": &"default",
-"speed": 3.0
-}]
-
-[sub_resource type="Animation" id="Animation_ho17g"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("zombie_sprite:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("zombie_label:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("death:playing")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-
-[sub_resource type="Animation" id="Animation_gyvb2"]
-resource_name = "disappear"
-length = 1.5
-=======
 [ext_resource type="FontFile" uid="uid://c46jdburihss2" path="res://font/Pixeled.ttf" id="2_3q6cj"]
 [ext_resource type="Texture2D" uid="uid://bxwk38dwr8ffj" path="res://Assets/putin.png" id="2_qnubm"]
 [ext_resource type="Texture2D" uid="uid://c8fdfffi2hqmk" path="res://Assets/xi.png" id="3_c4m77"]
@@ -87,7 +18,6 @@ length = 1.5
 
 [sub_resource type="Animation" id="Animation_e8y3x"]
 resource_name = "new_animation"
->>>>>>> parent of c0c706b (Merge branch 'Veron-Siaw' of https://github.com/F-456/Hackathon-2024-Match-Three-rpg into Veron-Siaw)
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -129,9 +59,6 @@ tracks/1/keys = {
 "values": [Color(1, 1, 1, 0.352941), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
-<<<<<<< HEAD
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_lab12"]
-=======
 [sub_resource type="Animation" id="Animation_5rpar"]
 length = 0.001
 tracks/0/type = "value"
@@ -210,7 +137,6 @@ tracks/1/keys = {
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_pgejq"]
->>>>>>> parent of c0c706b (Merge branch 'Veron-Siaw' of https://github.com/F-456/Hackathon-2024-Match-Three-rpg into Veron-Siaw)
 _data = {
 "RESET": SubResource("Animation_hxjdq"),
 "Xi": SubResource("Animation_d8kx6")
@@ -263,14 +189,9 @@ root_node = NodePath("../Xi")
 libraries = {
 "": SubResource("AnimationLibrary_pgejq")
 }
-script = ExtResource("12_gp0hg")
 
 [node name="Xi_sound" type="AudioStreamPlayer2D" parent="Grid"]
 stream = ExtResource("6_6ig1d")
-
-[node name="bgm" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("4_g5lo7")
-autoplay = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -336,17 +257,6 @@ offset_bottom = 587.0
 texture = ExtResource("3_c4m77")
 expand_mode = 1
 
-<<<<<<< HEAD
-[node name="zombie_label" type="Label" parent="Zombie"]
-offset_left = 280.0
-offset_top = 360.0
-offset_right = 326.0
-offset_bottom = 406.0
-theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_font_sizes/font_size = 30
-text = "30"
-horizontal_alignment = 1
-=======
 [node name="Trump" type="TextureRect" parent="."]
 offset_left = 415.0
 offset_top = 431.0
@@ -354,7 +264,6 @@ offset_right = 532.0
 offset_bottom = 588.0
 texture = ExtResource("4_078aj")
 expand_mode = 1
->>>>>>> parent of c0c706b (Merge branch 'Veron-Siaw' of https://github.com/F-456/Hackathon-2024-Match-Three-rpg into Veron-Siaw)
 
 [node name="Kim" type="TextureRect" parent="."]
 offset_left = 151.0
