@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dexj70i8hhvin"
+path="res://.godot/imported/Immediate Music - Protectors of Truth (NU EPIQ).mp3-e5add522a4e9ea2fbfb0102a298ed4d6.mp3str"
+
+[deps]
+
+source_file="res://SFX/Immediate Music - Protectors of Truth (NU EPIQ).mp3"
+dest_files=["res://.godot/imported/Immediate Music - Protectors of Truth (NU EPIQ).mp3-e5add522a4e9ea2fbfb0102a298ed4d6.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

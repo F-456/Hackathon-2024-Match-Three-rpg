@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://cu1llmox44mlj" path="res://Sprites/zombie1.png" id="3_b1pwk"]
 [ext_resource type="AudioStream" uid="uid://ihy7t4spn85t" path="res://SFX/move sound effect.MP3" id="3_cq0i5"]
 [ext_resource type="Texture2D" uid="uid://sjbhp8cnay5o" path="res://Sprites/zombie2.png" id="4_1pbmn"]
-[ext_resource type="FontFile" uid="uid://bcd302abu3csp" path="res://Font/Pixeled.ttf" id="4_qs386"]
+[ext_resource type="AudioStream" uid="uid://dexj70i8hhvin" path="res://SFX/Immediate Music - Protectors of Truth (NU EPIQ).mp3" id="4_g5lo7"]
 [ext_resource type="Texture2D" uid="uid://bc86oekfbrr3l" path="res://Sprites/zombie3.png" id="5_uha4r"]
 [ext_resource type="AudioStream" uid="uid://c84hi614itc4x" path="res://SFX/death sound effect.MP3" id="7_eduft"]
 
@@ -25,6 +25,45 @@ animations = [{
 "name": &"default",
 "speed": 3.0
 }]
+
+[sub_resource type="Animation" id="Animation_ho17g"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("zombie_sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("zombie_label:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("death:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_gyvb2"]
 resource_name = "disappear"
@@ -66,45 +105,6 @@ tracks/2/keys = {
 "values": [true]
 }
 
-[sub_resource type="Animation" id="Animation_ho17g"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("zombie_sprite:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("zombie_label:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("death:playing")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lab12"]
 _data = {
 "RESET": SubResource("Animation_ho17g"),
@@ -140,6 +140,10 @@ y_offset = -2
 
 [node name="swapping" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_cq0i5")
+
+[node name="bgm" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_g5lo7")
+autoplay = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -200,7 +204,7 @@ offset_top = 360.0
 offset_right = 326.0
 offset_bottom = 406.0
 theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_fonts/font = ExtResource("4_qs386")
+theme_override_font_sizes/font_size = 30
 text = "30"
 horizontal_alignment = 1
 
