@@ -148,6 +148,7 @@ func stop_match_timer():
 	if match_timer.is_stopped():
 		return
 	match_timer.stop()
+	timer_label.text = ""
 	
 	display_score_timer.connect("timeout",Callable(self,"display_score"))
 	display_score_timer.set_one_shot(true)
