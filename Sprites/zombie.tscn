@@ -1,8 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://cb3vdx5ygtuaq"]
+[gd_scene load_steps=8 format=3 uid="uid://dduedpq45ldhj"]
 
-[ext_resource type="Texture2D" path="res://Sprites/zombie1.png" id="1_leviq"]
-[ext_resource type="Texture2D" path="res://Sprites/zombie2.png" id="2_xljbx"]
-[ext_resource type="Texture2D" path="res://Sprites/zombie3.png" id="3_58gkt"]
+[ext_resource type="Texture2D" uid="uid://cu1llmox44mlj" path="res://Sprites/zombie1.png" id="1_leviq"]
+[ext_resource type="Script" path="res://Scripts/zombie.gd" id="1_xbqkw"]
+[ext_resource type="Texture2D" uid="uid://sjbhp8cnay5o" path="res://Sprites/zombie2.png" id="2_xljbx"]
+[ext_resource type="Texture2D" uid="uid://bc86oekfbrr3l" path="res://Sprites/zombie3.png" id="3_58gkt"]
+
+[sub_resource type="Animation" id="Animation_oudfq"]
+resource_name = "new_animation"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1msum"]
+_data = {
+"new_animation": SubResource("Animation_oudfq")
+}
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_axlkb"]
 animations = [{
@@ -21,9 +30,13 @@ animations = [{
 "speed": 3.0
 }]
 
-[node name="Node2D" type="Node2D"]
+[node name="Zombie" type="Node2D"]
+script = ExtResource("1_xbqkw")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_1msum")
+}
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(2, 2)

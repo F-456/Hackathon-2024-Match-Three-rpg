@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ihy7t4spn85t"
+path="res://.godot/imported/move sound effect.MP3-a5d86f007ae639a31823f6398f8b2173.mp3str"
+
+[deps]
+
+source_file="res://SFX/move sound effect.MP3"
+dest_files=["res://.godot/imported/move sound effect.MP3-a5d86f007ae639a31823f6398f8b2173.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
