@@ -1,0 +1,39 @@
+[gd_scene load_steps=7 format=3 uid="uid://hrmd6jq18ovl"]
+
+[ext_resource type="Texture2D" path="res://Sprites/Ghost2.png" id="1_lmye7"]
+[ext_resource type="Texture2D" path="res://Sprites/Ghost1.png" id="2_qd4ds"]
+[ext_resource type="Texture2D" path="res://Sprites/Ghost3.png" id="3_iovx7"]
+[ext_resource type="Texture2D" path="res://Sprites/Ghost4.png" id="4_mmyg4"]
+[ext_resource type="Texture2D" path="res://Sprites/Ghost5.png" id="5_u6bjb"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4gsbe"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_lmye7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_qd4ds")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_iovx7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_mmyg4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_u6bjb")
+}],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_4gsbe")
+frame_progress = 0.0146786
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
