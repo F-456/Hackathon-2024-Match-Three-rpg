@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://tmjgkck0s8uy"
-path="res://.godot/imported/trump.png-61f3128866699f01cd2ef169a0d0400d.ctex"
+uid="uid://dofkjq212md4k"
+path="res://.godot/imported/ai-generated-role-playing-rpg-game-background-free-photo.jpg-2da8a7ffa72ba92d07776700b5245a16.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/trump.png"
-dest_files=["res://.godot/imported/trump.png-61f3128866699f01cd2ef169a0d0400d.ctex"]
+source_file="res://Background/ai-generated-role-playing-rpg-game-background-free-photo.jpg"
+dest_files=["res://.godot/imported/ai-generated-role-playing-rpg-game-background-free-photo.jpg-2da8a7ffa72ba92d07776700b5245a16.ctex"]
 
 [params]
 

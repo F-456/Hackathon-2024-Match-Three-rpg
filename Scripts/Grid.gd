@@ -1,4 +1,5 @@
 extends Node2D
+
 @onready var label_pudding: Label = $"../labelPudding"
 @onready var label_fries: Label = $"../labelFries"
 @onready var label_bomb: Label = $"../labelBomb"
@@ -73,8 +74,6 @@ var controlling = false
 
 # New mechanic
 var matches_being_destroyed = false
-var new_destroyed_count = 0
-var number_of_destroyed = 0
 
 var sprite_destroyed_count  ={
 	"fries" = 0,
@@ -84,19 +83,16 @@ var sprite_destroyed_count  ={
 	"pudding" = 0
 }
 
-var color_map = {
+func update_sprite_destroyed_count(current_color):
+	var color_map = {
 		"blue": "pudding",
 		"green": "bomb",
 		"pink": "fries",
 		"red": "virus",
 		"yellow": "body_guard"
 	}
-
-func update_sprite_destroyed_count(current_color):
-
 	if current_color in color_map:
 		sprite_destroyed_count[color_map[current_color]] += 1
-		
 		print("%s number is now %d" % [color_map[current_color], sprite_destroyed_count[color_map[current_color]]])
 		
 		# Decrease zombie count every time a sprite is destroyed
@@ -114,28 +110,6 @@ func update_labels():
 	label_bodyguard.text = "Body Guard:  %d" %sprite_destroyed_count["body_guard"]
 	label_virus.text = "Virus:  %d" %sprite_destroyed_count["virus"]
 	label_pudding.text = "Pudding:  %d" %sprite_destroyed_count["pudding"]
-	
-	
-@onready var anim_player = $Trump2 
-@onready var anim_player2 = $XI2
-func number_of_destroy (color):
-	
-	if destroyed_count >= 4 and color == "pink" :
-		anim_player.play_animation_trump()
-		$Trump_sound.play()
-		
-	if destroyed_count >= 4 and color == "red" :
-		anim_player2.play_animation_xi()
-		$Xi_sound.play()
-		
-		
-
-func update_labels():
-	label_fries.text = "%d" %sprite_destroyed_count["fries"]
-	label_bomb.text = "%d" %sprite_destroyed_count["bomb"]
-	label_bodyguard.text = "%d" %sprite_destroyed_count["body_guard"]
-	label_virus.text = "%d" %sprite_destroyed_count["virus"]
-	label_pudding.text = "%d" %sprite_destroyed_count["pudding"]
 
 func update_zombie_label():
 	zombie_label.text = str(zombie_count)  # Update the zombie label text
@@ -379,7 +353,7 @@ func find_matches():
 	if found_match:
 		matches_being_destroyed = true # Prevent further matches from being found
 		destroy_timer.start()
-	
+
 		destroyed_count = 0 #reset the count to zero
 
 func is_piece_null(column, row):
@@ -390,20 +364,15 @@ func is_piece_null(column, row):
 func match_and_dim(item):
 	item.matched = true
 	item.dim()
-var color
+
 func destroy_matches():
 	var was_matched = false
 	destroyed_count = 0
-
 	var total_damage = 0 
-
-	
-
 
 	for i in width:
 		for j in height:
 			if all_dots[i][j] != null and all_dots[i][j].matched:
-
 				var color = all_dots[i][j].color
 				update_sprite_destroyed_count(color) # Call here with the correct color
 				destroyed_count += 1
@@ -419,26 +388,11 @@ func destroy_matches():
 	if zombies.size() > 0:
 		for zombie in zombies:
 			zombie.take_damage(total_damage)
-
-				color = all_dots[i][j].color
-				update_sprite_destroyed_count(color) # Call here with the correct color
-				destroyed_count += 1
-				#print(destroyed_count)
-				
-
-				was_matched = true
-				all_dots[i][j].queue_free()
-				all_dots[i][j] = null
-				#print (destroyed_count)
-				
-				check_enemy_elimination()
-
 					
 	if was_matched:
 		collapse_timer.start()
 
 	matches_being_destroyed = false
-	number_of_destroy(color)
 	update_labels()
 	collapse_columns()
 
@@ -471,7 +425,6 @@ func refill_columns():
 				add_child(dot)
 				dot.position = grid_to_pixel(i, j)
 				all_dots[i][j] = dot
-
 				
 func after_refill():
 	for i in width:
@@ -482,22 +435,6 @@ func after_refill():
 					destroy_timer.start()
 					return
 
-						
-					
-
-var bosses = {
-	"Slime" : {"Pudding" : 4, "Bomb" : 4},
-	"Zombie": {"Fries": 5, "Virus": 3},
-	"Ghost": {"Body Guard": 6, "Virus": 5},
-	"Bat": {"Pudding": 3, "Fries": 4}
-}
-
-func on_sprite_destroyed(sprite_type):
-	sprite_destroyed_count[sprite_type] = sprite_destroyed_count.get(sprite_type, 0) + 1
-	#print("Destroyed sprite: %s, Total destroyed: %d" % [sprite_type, sprite_destroyed_count[sprite_type]])
-	
-
-
 func on_match_timer_timeout():
 	controlling = false
 
@@ -507,7 +444,6 @@ func on_match_timer_timeout():
 	#add_child(zombie)  # Add zombie to the scene tree
 	#zombie.position = position  # Set the position of the zombie
 	
-
 	# Access the BombsLabel of the zombie and update the label
 	#var bombs_label = zombie.get_node("BombsLabel")
 	#if bombs_label:
@@ -516,40 +452,3 @@ func on_match_timer_timeout():
 	#else:
 	#	print("BombsLabel not found in zombie!")
 		
-
-	for sprite_type in enemy_requirements.keys():
-		enemy_requirements[sprite_type] = int(randf_range(1, 100))  # Randomly change the required number for each sprite
-		#print("Updated requirement for %s: %s = %d" % [enemy_name, sprite_type, enemy_requirements[sprite_type]])
-		
-
-		
-func check_enemy_elimination():
-	var enemies_to_remove = []  # Create a list to store defeated bosses
-	for enemy_name in bosses.keys():
-		var enemy_requirements = bosses[enemy_name]
-		var enemy_defeated = true  # Assume the boss is defeated unless proven otherwise
-		#print("Checking enemy: %s" % enemy_name)
-		for sprite_type in enemy_requirements.keys():
-			var required = enemy_requirements[sprite_type]  # The required amount of sprite for the boss
-			var destroyed = sprite_destroyed_count.get(sprite_type, 0)  # The destroyed amount of sprite
-			var remaining = required - destroyed  # The remaining amount needed for the boss to be defeated
-			#print("  %s: required=%d, destroyed=%d, remaining=%d" % [sprite_type, required, destroyed, remaining])
-			
-			if remaining > 0:
-				enemy_defeated = false
-				break
-		if enemy_defeated:
-			#print("Enemy %s has been defeated!" % enemy_name)
-			enemies_to_remove.append(enemy_name)  # Add the defeated boss to the removal list
-		else:
-			pass
-			#print("Enemy %s is not yet defeated" % enemy_name)
-	for enemy_name in enemies_to_remove:
-		bosses.erase(enemy_name)
-
-
-
-	
-
-func on_match_timer_timeout():
-	controlling = false
