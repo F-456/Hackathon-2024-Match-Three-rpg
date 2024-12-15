@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://ggxxxb0xwwy0"]
+
+[ext_resource type="Texture2D" path="res://Sprites/slime.png" id="1_7dw2u"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3j3xb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_7dw2u")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_3j3xb")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
