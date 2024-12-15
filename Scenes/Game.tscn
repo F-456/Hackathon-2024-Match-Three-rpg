@@ -21,6 +21,14 @@ height = 6
 offset = 70
 y_offset = -2
 
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Time_Limit" type="Timer" parent="CanvasLayer"]
+
+[node name="Timer_label" type="Label" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 23.0
+
 [node name="labelFries" type="Label" parent="."]
 offset_left = 10.0
 offset_top = 97.0

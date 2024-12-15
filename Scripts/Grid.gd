@@ -37,9 +37,18 @@ var state
 	preload("res://Scenes/Dots/yellow_dot.tscn"),
 ]
 
+@onready var timer_label = $"../CanvasLayer/Timer_label"
+
 var destroy_timer = Timer.new()
 var collapse_timer = Timer.new()
 var refill_timer = Timer.new()
+
+var match_timer = Timer.new()
+
+var match_time_limit = 7 # Time limit in seconds
+var time_remaining = match_time_limit # Remaining time counter
+var match_timer_running = false # To check if the timer is active
+
 var display_score_timer = Timer.new()
 
 
@@ -51,7 +60,6 @@ var dot_two = null
 
 var last_place = Vector2(0,0)
 var last_direction = Vector2(0,0)
-## var move_checked = false
 
 # Track the grid positions of the player's initial and final touch during a swipe
 var first_touch = Vector2(0,0)
@@ -87,7 +95,6 @@ var label_display
 
 
 func _ready():
-	##state = move
 	setup_timers() # Connects timers to their respective callback functions and sets wait times
 	display_score_timer.start() 
 	randomize() 
@@ -100,8 +107,11 @@ func _ready():
 	update_sprite_requirements_for_enemy("Zombie")
 	display_sprites_above_enemy()
 	
-	
-
+	# Initialize match timer
+	match_timer.connect("timeout", Callable(self, "on_match_timer_timeout"))
+	match_timer.set_one_shot(true)
+	timer_label.text = "Time Remaining: %d" % int(time_remaining)
+	add_child(match_timer)
 	
 func setup_timers():
 	# Manage delays between destroying matches, collapsing columns, and refilling the grid
@@ -119,6 +129,19 @@ func setup_timers():
 	refill_timer.set_one_shot(true)
 	refill_timer.set_wait_time(0.2)
 	add_child(refill_timer)
+
+func start_match_timer():
+	time_remaining = match_time_limit
+	match_timer.set_wait_time(time_remaining)
+	match_timer.start()
+	match_timer_running = true
+	print("7 sec remaining")
+
+func stop_match_timer():
+	if match_timer.is_stopped():
+		return
+	match_timer.stop()
+	print("Match timer stopped")
 	
 	display_score_timer.connect("timeout",Callable(self,"display_score"))
 	display_score_timer.set_one_shot(true)
@@ -197,6 +220,7 @@ func touch_input():
 			dot_one = all_dots[first_touch.x][first_touch.y]
 			if dot_one:
 				controlling = true
+				start_match_timer()
 	
 	elif Input.is_action_pressed("ui_touch") and controlling:
 		# Continuously track touch position
@@ -211,6 +235,7 @@ func touch_input():
 		
 	elif Input.is_action_just_released("ui_touch"):
 		controlling = false
+		stop_match_timer()
 		dot_one = null
 		dot_two = null
 			
@@ -247,12 +272,25 @@ func touch_difference(grid_1, grid_2):
 		elif difference.y < 0:
 			swap_dots(grid_1.x, grid_1.y, Vector2(0, -1))
 
-func _process(_delta):
+func _process(delta):
 	touch_input()
 	
 	# Run match detection after the player finishes their turn
 	if !controlling:
 		find_matches()
+	
+	if match_timer_running:
+		time_remaining -= delta
+		if time_remaining > 0:
+			# Update the label text
+			timer_label.text = "Time remaining: %d" % int(time_remaining)
+		else:
+			# Timer expired
+			match_timer_running = false
+			time_remaining = 0 
+			timer_label.text = "Time's Up!"
+			on_match_timer_timeout()
+		
 	
 func find_matches():
 
@@ -312,12 +350,12 @@ func find_matches():
 							if current_color == "yellow":
 								sprite_destroyed_count["body_guard"] += destroyed_count
 								print ("body guard number is now %d" % sprite_destroyed_count["body_guard"])
-								
-						
+
 	if found_match:
 		matches_being_destroyed = true # Prevent further matches from being found
 		print("Starting destroy timer....")
 		destroy_timer.start()
+
 		destroyed_count = 0 #reset the count to zero
 		#destroy_matches()
 
@@ -335,15 +373,14 @@ func match_and_dim(item):
 
 func destroy_matches():
 	var was_matched = false
-	destroyed_count = 0
+	
 	for i in width:
 		for j in height:
 			if all_dots[i][j] != null and all_dots[i][j].matched:
-				if all_dots[i][j].matched:
-					destroyed_count += 1
 					was_matched = true
 					all_dots[i][j].queue_free()
 					all_dots[i][j] = null
+					destroyed_count += 1
 					print (destroyed_count)
 					check_enemy_elimination()
 					
@@ -470,3 +507,7 @@ func check_enemy_elimination():
 
 
 	
+
+func on_match_timer_timeout():
+	controlling = false
+	print("Match timer ended")
