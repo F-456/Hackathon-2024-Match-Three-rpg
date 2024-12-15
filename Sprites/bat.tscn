@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://g346mqsqgwiv"]
+
+[ext_resource type="Texture2D" path="res://Sprites/Bat animation1.png" id="1_yty2r"]
+[ext_resource type="Texture2D" path="res://Sprites/Bat animation2.png" id="2_87li2"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hcy86"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_yty2r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_87li2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 2.0
+}]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(7, 7)
+sprite_frames = SubResource("SpriteFrames_hcy86")
+frame_progress = 0.689999
