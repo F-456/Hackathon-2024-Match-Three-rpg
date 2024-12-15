@@ -1,0 +1,66 @@
+[gd_scene load_steps=2 format=3 uid="uid://dn6n3gl1d74hd"]
+
+[ext_resource type="Script" path="res://Scripts/Grid.gd" id="1"]
+
+[node name="Game" type="Node"]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_right = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Grid" type="Node2D" parent="."]
+script = ExtResource("1")
+width = 6
+height = 6
+offset = 70
+y_offset = -2
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Time_Limit" type="Timer" parent="CanvasLayer"]
+
+[node name="Timer_label" type="Label" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="labelFries" type="Label" parent="."]
+offset_left = 10.0
+offset_top = 97.0
+offset_right = 50.0
+offset_bottom = 120.0
+text = "Fries"
+
+[node name="labelPudding" type="Label" parent="."]
+offset_left = 5.0
+offset_top = 32.0
+offset_right = 69.0
+offset_bottom = 55.0
+text = "Pudding"
+
+[node name="labelBomb" type="Label" parent="."]
+offset_left = 6.0
+offset_top = 15.0
+offset_right = 52.0
+offset_bottom = 38.0
+text = "Bomb"
+
+[node name="labelBodyguard" type="Label" parent="."]
+offset_left = 9.0
+offset_top = 52.0
+offset_right = 94.0
+offset_bottom = 75.0
+text = "Bodyguard"
+
+[node name="labelVirus" type="Label" parent="."]
+offset_left = 7.0
+offset_top = 74.0
+offset_right = 47.0
+offset_bottom = 97.0
+text = "Virus
+"
