@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c84hi614itc4x"
+path="res://.godot/imported/death sound effect.MP3-25d6d67e64bf4e8cf4f2c64349ada510.mp3str"
+
+[deps]
+
+source_file="res://SFX/death sound effect.MP3"
+dest_files=["res://.godot/imported/death sound effect.MP3-25d6d67e64bf4e8cf4f2c64349ada510.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

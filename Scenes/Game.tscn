@@ -1,132 +1,89 @@
-[gd_scene load_steps=23 format=3 uid="uid://dn6n3gl1d74hd"]
+[gd_scene load_steps=13 format=3 uid="uid://bn68vxvojvert"]
 
 [ext_resource type="Script" path="res://Scripts/Grid.gd" id="1"]
-[ext_resource type="FontFile" uid="uid://c46jdburihss2" path="res://font/Pixeled.ttf" id="2_3q6cj"]
-[ext_resource type="Texture2D" uid="uid://bxwk38dwr8ffj" path="res://Assets/putin.png" id="2_qnubm"]
-[ext_resource type="Texture2D" uid="uid://c8fdfffi2hqmk" path="res://Assets/xi.png" id="3_c4m77"]
-[ext_resource type="Texture2D" uid="uid://tmjgkck0s8uy" path="res://Assets/trump.png" id="4_078aj"]
-[ext_resource type="AudioStream" uid="uid://dh3ase13qv7y" path="res://Assets/trump skill.mp3" id="4_weera"]
-[ext_resource type="Texture2D" uid="uid://nql5w2bpka6e" path="res://Assets/kim.png" id="5_61loi"]
-[ext_resource type="Texture2D" uid="uid://cac87xneyl6p0" path="res://Assets/xi attack.png" id="5_mymi2"]
-[ext_resource type="AudioStream" uid="uid://5k63gose14h1" path="res://Assets/huainian.mp3" id="6_6ig1d"]
-[ext_resource type="Texture2D" uid="uid://dmd6bp62at4qh" path="res://Sprites/virus.png" id="6_mi80b"]
-[ext_resource type="Texture2D" uid="uid://ctqlag0iuuibg" path="res://Sprites/Nuclear bomb.png" id="7_x243l"]
-[ext_resource type="Texture2D" uid="uid://cgkotgkrilmuw" path="res://Sprites/Mcdonald.png" id="8_cmpvr"]
-[ext_resource type="Texture2D" uid="uid://dfpltbn13b55q" path="res://Sprites/Pudding.png" id="9_oitx2"]
-[ext_resource type="Texture2D" uid="uid://ddgloe4hur1ck" path="res://Assets/trump_attack.png" id="11_8e36e"]
-[ext_resource type="Script" path="res://Scenes/animation_player.gd" id="12_gp0hg"]
+[ext_resource type="Texture2D" uid="uid://dofkjq212md4k" path="res://Background/ai-generated-role-playing-rpg-game-background-free-photo.jpg" id="2_cpa15"]
+[ext_resource type="Texture2D" uid="uid://cu1llmox44mlj" path="res://Sprites/zombie1.png" id="3_b1pwk"]
+[ext_resource type="AudioStream" uid="uid://ihy7t4spn85t" path="res://SFX/move sound effect.MP3" id="3_cq0i5"]
+[ext_resource type="Texture2D" uid="uid://sjbhp8cnay5o" path="res://Sprites/zombie2.png" id="4_1pbmn"]
+[ext_resource type="FontFile" uid="uid://bcd302abu3csp" path="res://Font/Pixeled.ttf" id="4_qs386"]
+[ext_resource type="Texture2D" uid="uid://bc86oekfbrr3l" path="res://Sprites/zombie3.png" id="5_uha4r"]
+[ext_resource type="AudioStream" uid="uid://c84hi614itc4x" path="res://SFX/death sound effect.MP3" id="7_eduft"]
 
-[sub_resource type="Animation" id="Animation_e8y3x"]
-resource_name = "new_animation"
+[sub_resource type="SpriteFrames" id="SpriteFrames_1bge5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_uha4r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_1pbmn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_b1pwk")
+}],
+"loop": true,
+"name": &"default",
+"speed": 3.0
+}]
+
+[sub_resource type="Animation" id="Animation_gyvb2"]
+resource_name = "disappear"
+length = 1.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Grid/Trump:position")
+tracks/0/path = NodePath("zombie_sprite:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.1, 0.5),
+"times": PackedFloat32Array(0, 0.333333, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 0, 0, 0.866667), Color(1, 0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("zombie_label:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(258, 302), Vector2(571, 295)]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("death:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
-[sub_resource type="Animation" id="Animation_tm4kw"]
-resource_name = "Animation1"
-length = 2.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Grid/Trump:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.0333333, 0.7, 1.43333, 1.96667),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(-248, 266), Vector2(594, 302), Vector2(610, 310), Vector2(985, 454)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Grid/Trump:self_modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.0666667, 0.733333, 1.36667, 1.9),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0.352941), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_5rpar"]
+[sub_resource type="Animation" id="Animation_ho17g"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Grid/Trump:position")
+tracks/0/path = NodePath("zombie_sprite:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-248, 266)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_regs6"]
-_data = {
-"Animation1": SubResource("Animation_tm4kw"),
-"RESET": SubResource("Animation_5rpar"),
-"new_animation": SubResource("Animation_e8y3x")
-}
-
-[sub_resource type="Animation" id="Animation_d8kx6"]
-resource_name = "Xi"
-length = 2.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.9, 1.76667, 2.46667),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(564, 815), Vector2(573, 334), Vector2(573, 334), Vector2(589, -175)]
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:self_modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(-0.0333333, 0.866667, 1.83333, 2.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_hxjdq"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(564, 815)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:self_modulate")
+tracks/1/path = NodePath("zombie_label:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -135,11 +92,23 @@ tracks/1/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("death:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_pgejq"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lab12"]
 _data = {
-"RESET": SubResource("Animation_hxjdq"),
-"Xi": SubResource("Animation_d8kx6")
+"RESET": SubResource("Animation_ho17g"),
+"disappear": SubResource("Animation_gyvb2")
 }
 
 [node name="Game" type="Node"]
@@ -154,6 +123,14 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_left = -30.0
+offset_top = -16.0
+offset_right = 1719.0
+offset_bottom = 964.0
+scale = Vector2(0.692185, 0.693452)
+texture = ExtResource("2_cpa15")
+
 [node name="Grid" type="Node2D" parent="."]
 script = ExtResource("1")
 width = 6
@@ -161,38 +138,8 @@ height = 6
 offset = 70
 y_offset = -2
 
-[node name="Trump" type="Sprite2D" parent="Grid"]
-self_modulate = Color(1, 1, 1, 0.352941)
-z_index = 1
-position = Vector2(-248, 266)
-scale = Vector2(0.208349, 0.231803)
-texture = ExtResource("11_8e36e")
-
-[node name="Trump2" type="AnimationPlayer" parent="Grid"]
-root_node = NodePath("../..")
-libraries = {
-"": SubResource("AnimationLibrary_regs6")
-}
-script = ExtResource("12_gp0hg")
-
-[node name="Trump_sound" type="AudioStreamPlayer2D" parent="Grid"]
-stream = ExtResource("4_weera")
-
-[node name="Xi" type="Sprite2D" parent="Grid"]
-z_index = 1
-position = Vector2(564, 815)
-scale = Vector2(1.4775, 1.57834)
-texture = ExtResource("5_mymi2")
-
-[node name="XI2" type="AnimationPlayer" parent="Grid"]
-root_node = NodePath("../Xi")
-libraries = {
-"": SubResource("AnimationLibrary_pgejq")
-}
-script = ExtResource("12_gp0hg")
-
-[node name="Xi_sound" type="AudioStreamPlayer2D" parent="Grid"]
-stream = ExtResource("6_6ig1d")
+[node name="swapping" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_cq0i5")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -203,103 +150,64 @@ offset_right = 40.0
 offset_bottom = 23.0
 
 [node name="labelFries" type="Label" parent="."]
-offset_left = 457.0
-offset_top = 582.0
-offset_right = 503.0
-offset_bottom = 628.0
-theme_override_fonts/font = ExtResource("2_3q6cj")
-text = ":"
+offset_left = 8.0
+offset_top = 114.0
+offset_right = 48.0
+offset_bottom = 137.0
+text = "Fries"
 
 [node name="labelPudding" type="Label" parent="."]
-offset_left = 53.0
-offset_top = 577.0
-offset_right = 117.0
-offset_bottom = 623.0
-theme_override_fonts/font = ExtResource("2_3q6cj")
-text = ":"
+offset_left = 5.0
+offset_top = 52.0
+offset_right = 69.0
+offset_bottom = 75.0
+text = "Pudding"
 
 [node name="labelBomb" type="Label" parent="."]
-offset_left = 188.0
-offset_top = 578.0
-offset_right = 234.0
-offset_bottom = 624.0
-theme_override_fonts/font = ExtResource("2_3q6cj")
-text = ":"
+offset_left = 6.0
+offset_top = 35.0
+offset_right = 52.0
+offset_bottom = 58.0
+text = "Bomb"
 
 [node name="labelBodyguard" type="Label" parent="."]
 offset_left = 6.0
-offset_top = 15.0
+offset_top = 72.0
 offset_right = 91.0
-offset_bottom = 38.0
+offset_bottom = 95.0
 text = "Bodyguard"
 
 [node name="labelVirus" type="Label" parent="."]
-offset_left = 324.0
-offset_top = 578.0
-offset_right = 364.0
-offset_bottom = 624.0
-theme_override_fonts/font = ExtResource("2_3q6cj")
-text = ":
+offset_left = 8.0
+offset_top = 92.0
+offset_right = 48.0
+offset_bottom = 115.0
+text = "Virus
 "
 
-[node name="Putin" type="TextureRect" parent="."]
-offset_left = 19.0
-offset_top = 438.0
-offset_right = 136.0
-offset_bottom = 582.0
-texture = ExtResource("2_qnubm")
-expand_mode = 1
+[node name="Zombie" type="Node2D" parent="."]
 
-[node name="XI" type="TextureRect" parent="."]
-offset_left = 281.0
-offset_top = 436.0
-offset_right = 402.0
-offset_bottom = 587.0
-texture = ExtResource("3_c4m77")
-expand_mode = 1
+[node name="zombie_sprite" type="AnimatedSprite2D" parent="Zombie"]
+position = Vector2(302, 473)
+scale = Vector2(2.5, 2.5)
+sprite_frames = SubResource("SpriteFrames_1bge5")
+autoplay = "default"
+frame_progress = 0.62213
 
-[node name="Trump" type="TextureRect" parent="."]
-offset_left = 415.0
-offset_top = 431.0
-offset_right = 532.0
-offset_bottom = 588.0
-texture = ExtResource("4_078aj")
-expand_mode = 1
+[node name="zombie_label" type="Label" parent="Zombie"]
+offset_left = 280.0
+offset_top = 360.0
+offset_right = 326.0
+offset_bottom = 406.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_qs386")
+text = "30"
+horizontal_alignment = 1
 
-[node name="Kim" type="TextureRect" parent="."]
-offset_left = 151.0
-offset_top = 436.0
-offset_right = 269.0
-offset_bottom = 588.0
-texture = ExtResource("5_61loi")
-expand_mode = 1
+[node name="zombie_die" type="AnimationPlayer" parent="Zombie"]
+libraries = {
+"": SubResource("AnimationLibrary_lab12")
+}
 
-[node name="virus" type="TextureRect" parent="."]
-offset_left = 348.0
-offset_top = 543.0
-offset_right = 393.0
-offset_bottom = 585.0
-texture = ExtResource("6_mi80b")
-expand_mode = 1
-
-[node name="nuclear" type="TextureRect" parent="."]
-offset_left = 216.0
-offset_top = 533.0
-offset_right = 265.0
-offset_bottom = 580.0
-texture = ExtResource("7_x243l")
-expand_mode = 1
-
-[node name="fries" type="TextureRect" parent="."]
-offset_left = 480.0
-offset_top = 541.0
-offset_right = 520.0
-offset_bottom = 581.0
-texture = ExtResource("8_cmpvr")
-
-[node name="pudding" type="TextureRect" parent="."]
-offset_left = 87.0
-offset_top = 539.0
-offset_right = 127.0
-offset_bottom = 579.0
-texture = ExtResource("9_oitx2")
+[node name="death" type="AudioStreamPlayer2D" parent="Zombie"]
+stream = ExtResource("7_eduft")
