@@ -1,13 +1,372 @@
-[gd_scene load_steps=13 format=3 uid="uid://bn68vxvojvert"]
+[gd_scene load_steps=44 format=3 uid="uid://bn68vxvojvert"]
 
 [ext_resource type="Script" path="res://Scripts/Grid.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://do1trrd35reag" path="res://Assets/trump.png" id="2_ar7mw"]
 [ext_resource type="Texture2D" uid="uid://dofkjq212md4k" path="res://Background/ai-generated-role-playing-rpg-game-background-free-photo.jpg" id="2_cpa15"]
 [ext_resource type="Texture2D" uid="uid://cu1llmox44mlj" path="res://Sprites/zombie1.png" id="3_b1pwk"]
 [ext_resource type="AudioStream" uid="uid://ihy7t4spn85t" path="res://SFX/move sound effect.MP3" id="3_cq0i5"]
+[ext_resource type="Texture2D" uid="uid://cgkotgkrilmuw" path="res://Sprites/Mcdonald.png" id="3_rln0p"]
 [ext_resource type="Texture2D" uid="uid://sjbhp8cnay5o" path="res://Sprites/zombie2.png" id="4_1pbmn"]
 [ext_resource type="AudioStream" uid="uid://dexj70i8hhvin" path="res://SFX/Immediate Music - Protectors of Truth (NU EPIQ).mp3" id="4_g5lo7"]
+[ext_resource type="Texture2D" uid="uid://c1thrd1vt48hf" path="res://Assets/xi.png" id="4_ljcvp"]
+[ext_resource type="Texture2D" uid="uid://y61m8irslntl" path="res://Assets/trump_attack.png" id="5_4prdl"]
+[ext_resource type="Texture2D" uid="uid://dmd6bp62at4qh" path="res://Sprites/virus.png" id="5_44c8i"]
 [ext_resource type="Texture2D" uid="uid://bc86oekfbrr3l" path="res://Sprites/zombie3.png" id="5_uha4r"]
+[ext_resource type="AudioStream" uid="uid://bhx3gcopbfjx7" path="res://SFX/trump skill.mp3" id="6_me2b7"]
+[ext_resource type="FontFile" uid="uid://clg5yxaemtrnq" path="res://Font/Pixeled.ttf" id="6_rbvyy"]
+[ext_resource type="Script" path="res://Scripts/animation_player.gd" id="6_tdh47"]
+[ext_resource type="Texture2D" uid="uid://bx81557evfth0" path="res://Assets/kim.png" id="6_wov8d"]
 [ext_resource type="AudioStream" uid="uid://c84hi614itc4x" path="res://SFX/death sound effect.MP3" id="7_eduft"]
+[ext_resource type="Texture2D" uid="uid://ctqlag0iuuibg" path="res://Sprites/Nuclear bomb.png" id="7_vnd5r"]
+[ext_resource type="Texture2D" uid="uid://bljupj836by21" path="res://Assets/putin.png" id="8_uqfhx"]
+[ext_resource type="Texture2D" uid="uid://dfpltbn13b55q" path="res://Sprites/Pudding.png" id="9_oxdb5"]
+[ext_resource type="Texture2D" uid="uid://dcx5kebgv7tib" path="res://Assets/xi attack.png" id="14_hr4mk"]
+[ext_resource type="AudioStream" uid="uid://bcp1ak0nfg0x3" path="res://SFX/huainian.mp3" id="15_u11cb"]
+[ext_resource type="Texture2D" uid="uid://chgrll0dcaecq" path="res://Assets/kim attack.png" id="16_dis88"]
+[ext_resource type="AudioStream" uid="uid://dqwe1h4nm7e4k" path="res://SFX/KimAttack1.MP3" id="17_3lymp"]
+[ext_resource type="AudioStream" uid="uid://bks18ylwef11l" path="res://SFX/match combo 1.MP3" id="18_0d1fx"]
+[ext_resource type="Texture2D" uid="uid://dmn1yfsai27s0" path="res://Assets/putin attack.png" id="18_3poj8"]
+[ext_resource type="AudioStream" uid="uid://cdku4jovxpeqq" path="res://SFX/PutinAttack1.MP3" id="19_b0k6h"]
+
+[sub_resource type="Animation" id="Animation_3wihk"]
+resource_name = "Animation1"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Trump:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.7, 1.43333, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(-324, 216), Vector2(543, 330), Vector2(570, 340), Vector2(964, 553)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Trump:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.7, 1.43333, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("TrumpVoice1:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_fkg1i"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Trump:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-324, 216)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Trump:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("TrumpVoice1:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_w2fye"]
+_data = {
+"Animation1": SubResource("Animation_3wihk"),
+"RESET": SubResource("Animation_fkg1i")
+}
+
+[sub_resource type="Animation" id="Animation_ebiqx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Xi:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(528, 803)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Xi:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("XiVoice1:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_ewer4"]
+resource_name = "XiAnimation1"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Xi:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.7, 1.43333, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(528, 803), Vector2(528, 339), Vector2(528, 299), Vector2(528, -293)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Xi:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.7, 1.43333, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("XiVoice1:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4dh4d"]
+_data = {
+"RESET": SubResource("Animation_ebiqx"),
+"XiAnimation1": SubResource("Animation_ewer4")
+}
+
+[sub_resource type="Animation" id="Animation_2b3ib"]
+resource_name = "KimAnimation1"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Kim:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.7, 1.43333, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1393, 223), Vector2(540, 329), Vector2(495, 350), Vector2(67, 530)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Kim:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.7, 1.43333, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("KimVoice1:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_qmdkk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Kim:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1393, 223)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Kim:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("KimVoice1:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3bip2"]
+_data = {
+"KimAnimation1": SubResource("Animation_2b3ib"),
+"RESET": SubResource("Animation_qmdkk")
+}
+
+[sub_resource type="Animation" id="Animation_ktb31"]
+resource_name = "PutinAnimation1"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Putin:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.7, 1.43333, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(512, -268), Vector2(512, 324), Vector2(512, 356), Vector2(512, 868)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Putin:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.7, 1.43333, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PutinVoice1:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_rrd5d"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Putin:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(512, -268)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Putin:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PutinVoice1:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pkda3"]
+_data = {
+"PutinAnimation1": SubResource("Animation_ktb31"),
+"RESET": SubResource("Animation_rrd5d")
+}
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_1bge5"]
 animations = [{
@@ -117,19 +476,93 @@ _data = {
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 1.0
-offset_right = 1.0
+offset_left = -131.0
+offset_top = -55.0
+offset_right = -131.0
+offset_bottom = -55.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(1.16463, 1.16463)
 color = Color(0, 0, 0, 1)
 
-[node name="TextureRect" type="TextureRect" parent="."]
-offset_left = -30.0
-offset_top = -16.0
-offset_right = 1719.0
-offset_bottom = 964.0
-scale = Vector2(0.692185, 0.693452)
+[node name="Background" type="TextureRect" parent="."]
+offset_left = -68.0
+offset_right = 1681.0
+offset_bottom = 980.0
+scale = Vector2(0.402797, 0.403534)
 texture = ExtResource("2_cpa15")
+
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2(-2.38419e-07, 0)
+scale = Vector2(0.692185, 0.693452)
+
+[node name="Trump" type="TextureRect" parent="Node2D"]
+offset_left = 689.122
+offset_top = 637.0
+offset_right = 1363.12
+offset_bottom = 1517.0
+scale = Vector2(0.25026, 0.25026)
+texture = ExtResource("2_ar7mw")
+
+[node name="fries" type="TextureRect" parent="Node2D/Trump"]
+layout_mode = 0
+offset_left = 473.369
+offset_top = 679.945
+offset_right = 513.369
+offset_bottom = 719.945
+scale = Vector2(4.51002, 4.51002)
+texture = ExtResource("3_rln0p")
+
+[node name="Xi" type="TextureRect" parent="Node2D"]
+offset_left = 450.747
+offset_top = 637.0
+offset_right = 1124.74
+offset_bottom = 1517.0
+scale = Vector2(0.25026, 0.25026)
+texture = ExtResource("4_ljcvp")
+
+[node name="virus" type="TextureRect" parent="Node2D/Xi"]
+layout_mode = 0
+offset_left = 473.369
+offset_top = 679.945
+offset_right = 513.369
+offset_bottom = 719.945
+scale = Vector2(4.51002, 4.51002)
+texture = ExtResource("5_44c8i")
+
+[node name="Kim" type="TextureRect" parent="Node2D"]
+offset_left = 212.371
+offset_top = 637.0
+offset_right = 886.366
+offset_bottom = 1517.0
+scale = Vector2(0.25026, 0.25026)
+texture = ExtResource("6_wov8d")
+
+[node name="bomb" type="TextureRect" parent="Node2D/Kim"]
+layout_mode = 0
+offset_left = 496.46
+offset_top = 674.183
+offset_right = 560.46
+offset_bottom = 738.183
+scale = Vector2(2.85836, 2.85836)
+texture = ExtResource("7_vnd5r")
+
+[node name="Putin" type="TextureRect" parent="Node2D"]
+offset_left = -26.004
+offset_top = 637.0
+offset_right = 647.991
+offset_bottom = 1517.0
+scale = Vector2(0.25026, 0.25026)
+texture = ExtResource("8_uqfhx")
+
+[node name="pudding" type="TextureRect" parent="Node2D/Putin"]
+layout_mode = 0
+offset_left = 473.369
+offset_top = 679.945
+offset_right = 513.369
+offset_bottom = 719.945
+scale = Vector2(4.51002, 4.51002)
+texture = ExtResource("9_oxdb5")
 
 [node name="Grid" type="Node2D" parent="."]
 script = ExtResource("1")
@@ -138,6 +571,74 @@ height = 6
 offset = 70
 y_offset = -2
 
+[node name="Trump" type="Sprite2D" parent="Grid"]
+modulate = Color(1, 1, 1, 0)
+z_index = 1
+position = Vector2(-324, 216)
+scale = Vector2(0.203254, 0.203254)
+texture = ExtResource("5_4prdl")
+
+[node name="TrumpAttack" type="AnimationPlayer" parent="Grid"]
+libraries = {
+"": SubResource("AnimationLibrary_w2fye")
+}
+script = ExtResource("6_tdh47")
+
+[node name="TrumpVoice1" type="AudioStreamPlayer2D" parent="Grid"]
+stream = ExtResource("6_me2b7")
+volume_db = 15.294
+
+[node name="Xi" type="Sprite2D" parent="Grid"]
+modulate = Color(1, 1, 1, 0)
+z_index = 1
+position = Vector2(528, 803)
+scale = Vector2(1.22727, 1.22727)
+texture = ExtResource("14_hr4mk")
+
+[node name="XiAttack" type="AnimationPlayer" parent="Grid"]
+libraries = {
+"": SubResource("AnimationLibrary_4dh4d")
+}
+script = ExtResource("6_tdh47")
+
+[node name="XiVoice1" type="AudioStreamPlayer2D" parent="Grid"]
+stream = ExtResource("15_u11cb")
+volume_db = 24.0
+
+[node name="Kim" type="Sprite2D" parent="Grid"]
+modulate = Color(1, 1, 1, 0)
+z_index = 1
+position = Vector2(1393, 223)
+scale = Vector2(0.857978, 0.857978)
+texture = ExtResource("16_dis88")
+
+[node name="KimAttack" type="AnimationPlayer" parent="Grid"]
+libraries = {
+"": SubResource("AnimationLibrary_3bip2")
+}
+script = ExtResource("6_tdh47")
+
+[node name="KimVoice1" type="AudioStreamPlayer2D" parent="Grid"]
+stream = ExtResource("17_3lymp")
+volume_db = 16.865
+
+[node name="Putin" type="Sprite2D" parent="Grid"]
+modulate = Color(1, 1, 1, 0)
+z_index = 1
+position = Vector2(512, -268)
+scale = Vector2(0.774688, 0.774688)
+texture = ExtResource("18_3poj8")
+
+[node name="PutinAttack" type="AnimationPlayer" parent="Grid"]
+libraries = {
+"": SubResource("AnimationLibrary_pkda3")
+}
+script = ExtResource("6_tdh47")
+
+[node name="PutinVoice1" type="AudioStreamPlayer2D" parent="Grid"]
+stream = ExtResource("19_b0k6h")
+volume_db = 15.459
+
 [node name="swapping" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_cq0i5")
 
@@ -145,66 +646,89 @@ stream = ExtResource("3_cq0i5")
 stream = ExtResource("4_g5lo7")
 autoplay = true
 
+[node name="combo1" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("18_0d1fx")
+volume_db = 13.255
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Time_Limit" type="Timer" parent="CanvasLayer"]
 
 [node name="Timer_label" type="Label" parent="CanvasLayer"]
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 832.0
+offset_top = 562.0
+offset_right = 872.0
+offset_bottom = 608.0
+theme_override_fonts/font = ExtResource("6_rbvyy")
+horizontal_alignment = 1
 
 [node name="labelFries" type="Label" parent="."]
-offset_left = 8.0
-offset_top = 114.0
-offset_right = 48.0
-offset_bottom = 137.0
-text = "Fries"
+offset_left = 503.0
+offset_top = 573.0
+offset_right = 528.0
+offset_bottom = 615.0
+scale = Vector2(3, 3)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("6_rbvyy")
+theme_override_font_sizes/font_size = 10
+horizontal_alignment = 1
 
 [node name="labelPudding" type="Label" parent="."]
 offset_left = 5.0
-offset_top = 52.0
-offset_right = 69.0
-offset_bottom = 75.0
-text = "Pudding"
+offset_top = 573.0
+offset_right = 30.0
+offset_bottom = 615.0
+scale = Vector2(3, 3)
+theme_override_fonts/font = ExtResource("6_rbvyy")
+theme_override_font_sizes/font_size = 10
+horizontal_alignment = 1
 
 [node name="labelBomb" type="Label" parent="."]
-offset_left = 6.0
-offset_top = 35.0
-offset_right = 52.0
-offset_bottom = 58.0
-text = "Bomb"
-
-[node name="labelBodyguard" type="Label" parent="."]
-offset_left = 6.0
-offset_top = 72.0
-offset_right = 91.0
-offset_bottom = 95.0
-text = "Bodyguard"
+offset_left = 172.0
+offset_top = 573.0
+offset_right = 197.0
+offset_bottom = 615.0
+scale = Vector2(3, 3)
+theme_override_fonts/font = ExtResource("6_rbvyy")
+theme_override_font_sizes/font_size = 10
+horizontal_alignment = 1
 
 [node name="labelVirus" type="Label" parent="."]
-offset_left = 8.0
-offset_top = 92.0
-offset_right = 48.0
-offset_bottom = 115.0
-text = "Virus
+offset_left = 338.0
+offset_top = 573.0
+offset_right = 363.0
+offset_bottom = 615.0
+scale = Vector2(3, 3)
+theme_override_fonts/font = ExtResource("6_rbvyy")
+theme_override_font_sizes/font_size = 10
+text = "
 "
+horizontal_alignment = 1
+
+[node name="labelBodyguard" type="Label" parent="."]
+offset_left = -19.0
+offset_top = 396.0
+offset_right = 125.0
+offset_bottom = 442.0
+theme_override_fonts/font = ExtResource("6_rbvyy")
 
 [node name="Zombie" type="Node2D" parent="."]
 
 [node name="zombie_sprite" type="AnimatedSprite2D" parent="Zombie"]
-position = Vector2(302, 473)
+position = Vector2(287.25, 242)
 scale = Vector2(2.5, 2.5)
 sprite_frames = SubResource("SpriteFrames_1bge5")
 autoplay = "default"
 frame_progress = 0.62213
 
 [node name="zombie_label" type="Label" parent="Zombie"]
-offset_left = 280.0
-offset_top = 360.0
-offset_right = 326.0
-offset_bottom = 406.0
+offset_left = 265.25
+offset_top = 129.0
+offset_right = 311.25
+offset_bottom = 175.0
 theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_font_sizes/font_size = 30
+theme_override_fonts/font = ExtResource("6_rbvyy")
+theme_override_font_sizes/font_size = 15
 text = "30"
 horizontal_alignment = 1
 
@@ -215,3 +739,6 @@ libraries = {
 
 [node name="death" type="AudioStreamPlayer2D" parent="Zombie"]
 stream = ExtResource("7_eduft")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(508, 324)

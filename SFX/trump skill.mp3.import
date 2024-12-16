@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bhx3gcopbfjx7"
+path="res://.godot/imported/trump skill.mp3-e5571da969a4cb7099b5d9fdb6210cad.mp3str"
+
+[deps]
+
+source_file="res://SFX/trump skill.mp3"
+dest_files=["res://.godot/imported/trump skill.mp3-e5571da969a4cb7099b5d9fdb6210cad.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

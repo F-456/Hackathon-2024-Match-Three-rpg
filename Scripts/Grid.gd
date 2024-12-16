@@ -1,5 +1,10 @@
 extends Node2D
 
+@onready var trump_attack = $TrumpAttack
+@onready var xi_attack = $XiAttack
+@onready var kim_attack = $KimAttack
+@onready var putin_attack = $PutinAttack
+
 @onready var label_pudding: Label = $"../labelPudding"
 @onready var label_fries: Label = $"../labelFries"
 @onready var label_bomb: Label = $"../labelBomb"
@@ -8,6 +13,7 @@ extends Node2D
 
 @onready var zombie_die = $"../Zombie/zombie_die"
 @onready var swapping = $"../swapping"
+@onready var combo_1 = $"../combo1"
 
 # Dimensions of the grid in terms of cells
 @export var width: int
@@ -105,11 +111,11 @@ func update_sprite_destroyed_count(current_color):
 
 func update_labels():
 	print("Labels updated: ", sprite_destroyed_count)  # Debugging line
-	label_fries.text = "Fries: %d" %sprite_destroyed_count["fries"]
-	label_bomb.text = "Bomb: %d" %sprite_destroyed_count["bomb"]
-	label_bodyguard.text = "Body Guard:  %d" %sprite_destroyed_count["body_guard"]
-	label_virus.text = "Virus:  %d" %sprite_destroyed_count["virus"]
-	label_pudding.text = "Pudding:  %d" %sprite_destroyed_count["pudding"]
+	label_fries.text = "%d" %sprite_destroyed_count["fries"]
+	label_bomb.text = "%d" %sprite_destroyed_count["bomb"]
+	label_bodyguard.text = "%d" %sprite_destroyed_count["body_guard"]
+	label_virus.text = "%d" %sprite_destroyed_count["virus"]
+	label_pudding.text = "%d" %sprite_destroyed_count["pudding"]
 
 func update_zombie_label():
 	zombie_label.text = str(zombie_count)  # Update the zombie label text
@@ -125,7 +131,8 @@ var destroyed_count = 0
 var label_display
 
 
-func _ready():
+func _ready() -> void:
+	
 	setup_timers() # Connects timers to their respective callback functions and sets wait times
 	display_score_timer.start() 
 	randomize() 
@@ -136,7 +143,7 @@ func _ready():
 	# Initialize match timer
 	match_timer.connect("timeout", Callable(self, "on_match_timer_timeout"))
 	match_timer.set_one_shot(true)
-	timer_label.text = "Time Remaining: %d" % int(time_remaining)
+	timer_label.text = ""
 	add_child(match_timer)
 	
 	#spawn_zombie(Vector2(300, 500))  # Example spawn position
@@ -313,14 +320,14 @@ func _process(delta):
 	
 	if match_timer_running:
 		time_remaining -= delta
-		if time_remaining > 0:
+		if time_remaining > 0 and Input.is_action_pressed("ui_touch"):
 			# Update the label text
 			timer_label.text = "Time remaining: %d" % int(time_remaining)
 		else:
 			# Timer expired
 			match_timer_running = false
 			time_remaining = 0 
-			timer_label.text = "Time's Up!"
+			timer_label.text = ""
 			on_match_timer_timeout()
 		
 	
@@ -364,8 +371,11 @@ func is_piece_null(column, row):
 func match_and_dim(item):
 	item.matched = true
 	item.dim()
+	
+var color
 
 func destroy_matches():
+	combo_1.play()
 	var was_matched = false
 	destroyed_count = 0
 	var total_damage = 0 
@@ -373,7 +383,7 @@ func destroy_matches():
 	for i in width:
 		for j in height:
 			if all_dots[i][j] != null and all_dots[i][j].matched:
-				var color = all_dots[i][j].color
+				color = all_dots[i][j].color
 				update_sprite_destroyed_count(color) # Call here with the correct color
 				destroyed_count += 1
 				was_matched = true
@@ -393,6 +403,7 @@ func destroy_matches():
 		collapse_timer.start()
 
 	matches_being_destroyed = false
+	number_of_destroy(color)
 	update_labels()
 	collapse_columns()
 
@@ -438,17 +449,16 @@ func after_refill():
 func on_match_timer_timeout():
 	controlling = false
 
-# Function to spawn a zombie
-#func spawn_zombie(position: Vector2):
-	#var zombie = zombie_scene.instantiate()  # Create a new zombie instance
-	#add_child(zombie)  # Add zombie to the scene tree
-	#zombie.position = position  # Set the position of the zombie
+func number_of_destroy(color):
+	if destroyed_count >= 4 and color == "pink" :
+		trump_attack.play_animation_trump()
+		
+	if destroyed_count >= 4 and color == "red" :
+		xi_attack.play_animation_xi()
 	
-	# Access the BombsLabel of the zombie and update the label
-	#var bombs_label = zombie.get_node("BombsLabel")
-	#if bombs_label:
-	#	bombs_label.text = "5"  # Set the initial bomb count for the zombie
-	#	print("Zombie spawned with label text: ", bombs_label.text)
-	#else:
-	#	print("BombsLabel not found in zombie!")
+	if destroyed_count >= 4 and color == "green":
+		kim_attack.play_animation_kim()
+	
+	if destroyed_count >= 4 and color == "blue":
+		putin_attack.play_animation_putin()
 		
