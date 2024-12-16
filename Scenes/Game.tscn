@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://bn68vxvojvert"]
+[gd_scene load_steps=43 format=3 uid="uid://bn68vxvojvert"]
 
 [ext_resource type="Script" path="res://Scripts/Grid.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://do1trrd35reag" path="res://Assets/trump.png" id="2_ar7mw"]
@@ -24,7 +24,6 @@
 [ext_resource type="AudioStream" uid="uid://bcp1ak0nfg0x3" path="res://SFX/huainian.mp3" id="15_u11cb"]
 [ext_resource type="Texture2D" uid="uid://chgrll0dcaecq" path="res://Assets/kim attack.png" id="16_dis88"]
 [ext_resource type="AudioStream" uid="uid://dqwe1h4nm7e4k" path="res://SFX/KimAttack1.MP3" id="17_3lymp"]
-[ext_resource type="AudioStream" uid="uid://bks18ylwef11l" path="res://SFX/match combo 1.MP3" id="18_0d1fx"]
 [ext_resource type="Texture2D" uid="uid://dmn1yfsai27s0" path="res://Assets/putin attack.png" id="18_3poj8"]
 [ext_resource type="AudioStream" uid="uid://cdku4jovxpeqq" path="res://SFX/PutinAttack1.MP3" id="19_b0k6h"]
 
@@ -485,6 +484,14 @@ grow_vertical = 2
 scale = Vector2(1.16463, 1.16463)
 color = Color(0, 0, 0, 1)
 
+[node name="combo_label" type="Label" parent="."]
+offset_left = 775.0
+offset_top = 25.0
+offset_right = 875.0
+offset_bottom = 109.0
+theme_override_fonts/font = ExtResource("6_rbvyy")
+theme_override_font_sizes/font_size = 30
+
 [node name="Background" type="TextureRect" parent="."]
 offset_left = -68.0
 offset_right = 1681.0
@@ -645,10 +652,6 @@ stream = ExtResource("3_cq0i5")
 [node name="bgm" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_g5lo7")
 autoplay = true
-
-[node name="combo1" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("18_0d1fx")
-volume_db = 13.255
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

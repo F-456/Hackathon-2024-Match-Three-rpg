@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c7tuii4hrp7o8"
+path="res://.godot/imported/combo sound 4.MP3-5189e9ce14bdd72e08d1ba1aeed7eaeb.mp3str"
+
+[deps]
+
+source_file="res://SFX/combo sound 4.MP3"
+dest_files=["res://.godot/imported/combo sound 4.MP3-5189e9ce14bdd72e08d1ba1aeed7eaeb.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

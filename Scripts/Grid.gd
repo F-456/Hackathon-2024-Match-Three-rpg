@@ -1,9 +1,12 @@
 extends Node2D
 
+@onready var combo_label = $"../combo_label"
+
 @onready var trump_attack = $TrumpAttack
 @onready var xi_attack = $XiAttack
 @onready var kim_attack = $KimAttack
 @onready var putin_attack = $PutinAttack
+
 
 @onready var label_pudding: Label = $"../labelPudding"
 @onready var label_fries: Label = $"../labelFries"
@@ -13,7 +16,6 @@ extends Node2D
 
 @onready var zombie_die = $"../Zombie/zombie_die"
 @onready var swapping = $"../swapping"
-@onready var combo_1 = $"../combo1"
 
 # Dimensions of the grid in terms of cells
 @export var width: int
@@ -45,6 +47,17 @@ var zombie_sprite : AnimatedSprite2D
 	preload("res://Scenes/Dots/red_dot.tscn"),
 	preload("res://Scenes/Dots/yellow_dot.tscn"),
 ]
+
+var combo_sounds = [
+	preload("res://SFX/combo sound 1.MP3"),
+	preload("res://SFX/combo sound 2.MP3"),
+	preload("res://SFX/combo sound 3.MP3"),
+	preload("res://SFX/combo sound 4.MP3"),
+	preload("res://SFX/combo sound 5.MP3"),
+]
+
+var combo_count = 0  # Variable to keep track of how many matches are destroyed
+var audio_player : AudioStreamPlayer  # Declare an AudioStreamPlayer node
 
 @onready var timer_label = $"../CanvasLayer/Timer_label"
 
@@ -134,8 +147,8 @@ var label_display
 func _ready() -> void:
 	
 	setup_timers() # Connects timers to their respective callback functions and sets wait times
-	display_score_timer.start() 
-	randomize() 
+	display_score_timer.start()
+	randomize()
 	all_dots = make_2d_array() # Initializes the all_dots 2D array with null values
 	spawn_dots() # Spawns dots into the grid.
 	randomize()
@@ -150,6 +163,11 @@ func _ready() -> void:
 	
 	zombie_label = $"../Zombie/zombie_label"  # Make sure to assign the label node correctly
 	zombie_sprite = $"../Zombie/zombie_sprite"
+	
+	# Ensure an AudioStreamPlayer node is present
+	if not audio_player:
+		audio_player = AudioStreamPlayer.new()
+		add_child(audio_player)  # Add the player to the scene if not already added
 
 	
 func setup_timers():
@@ -251,6 +269,8 @@ func is_in_grid(grid_position):
 
 func touch_input():
 	if Input.is_action_just_pressed("ui_touch"):
+		combo_label.text = ""
+		combo_count = 0
 		# If a touch begins (ui_touch pressed), records the grid position
 		var touch_pos = get_global_mouse_position()
 		if is_in_grid(pixel_to_grid(touch_pos.x,touch_pos.y)):
@@ -326,7 +346,7 @@ func _process(delta):
 		else:
 			# Timer expired
 			match_timer_running = false
-			time_remaining = 0 
+			time_remaining = 0
 			timer_label.text = ""
 			on_match_timer_timeout()
 		
@@ -375,40 +395,120 @@ func match_and_dim(item):
 var color
 
 func destroy_matches():
-	combo_1.play()
 	var was_matched = false
 	destroyed_count = 0
-	var total_damage = 0 
+	var total_damage = 0
 
-	for i in width:
-		for j in height:
-			if all_dots[i][j] != null and all_dots[i][j].matched:
-				color = all_dots[i][j].color
-				update_sprite_destroyed_count(color) # Call here with the correct color
-				destroyed_count += 1
-				was_matched = true
-				all_dots[i][j].queue_free()
-				all_dots[i][j] = null
-				
-	# Calculate total damage based on sprite_destroyed_count
-	for key in sprite_destroyed_count.keys():
-		total_damage += sprite_destroyed_count[key]
+	var match_delay = 0.5  # Set the delay between match group destructions (in seconds)
+	var matches_to_destroy = []  # Store the matched groups
+	var visited = []  # To track visited dots so they are not part of multiple groups
 	
-	# Apply damage to the zombie
+
+	# Collect all the matched groups
+	for i in range(width):
+		for j in range(height):
+			if all_dots[i][j] != null and all_dots[i][j].matched and not is_visited(i, j, visited):
+				var group = get_matched_group(i, j, visited)  # Get the group of matched dots
+				if group:
+					matches_to_destroy.append(group)
+					for dot in group:
+						dot.matched = false  # Reset matched status
+
+	if matches_to_destroy.size() > 0:
+		was_matched = true
+
+	# Destroy the groups one by one
+	var first_match = true  # Flag to track the first match
+
+	for group in matches_to_destroy:
+		if not first_match:
+			# Wait for the delay before destroying this group
+			await get_tree().create_timer(match_delay).timeout
+		else:
+			first_match = false  # After the first match, disable the first match condition
+
+		# Destroy the dots in the current group
+		for dot in group:
+			dot.queue_free()  # Destroy the dot
+			update_sprite_destroyed_count(dot.color)  # Update count for destroyed color
+		
+		combo_count += 1  # Increment combo count each time a group is destroyed
+		update_combo_label()
+		
+		# Call update_labels after every match is destroyed to keep other labels updated
+		update_labels()  # Update any other labels such as score or time
+
+		# Play combo sound based on combo count
+		play_combo_sound(combo_count)
+
+	# Apply damage to zombies after all groups are destroyed
 	if zombies.size() > 0:
 		for zombie in zombies:
 			zombie.take_damage(total_damage)
-					
+
+	# If any matches were destroyed, start the column collapse and refill processes
 	if was_matched:
 		collapse_timer.start()
 
 	matches_being_destroyed = false
 	number_of_destroy(color)
-	update_labels()
-	collapse_columns()
+	collapse_columns()  # Start collapsing columns after matches are destroyed
+
+# Function to play combo sound based on combo count
+func play_combo_sound(count: int):
+	if count <= combo_sounds.size():
+		# Set the stream of the player to the corresponding combo sound
+		audio_player.stream = combo_sounds[count - 1]
+		audio_player.play()  # Play the sound
+	else:
+		# Play the last sound if the combo count exceeds available sounds
+		audio_player.stream = combo_sounds[combo_sounds.size() - 1]
+		audio_player.play()
+
+# Function to update the combo label
+func update_combo_label():
+	combo_label.text = "COMBO %d" % combo_count
+
+# This function gets the matched group of dots starting from the given coordinates
+# It also marks the visited dots to ensure that they are not counted in multiple groups
+func get_matched_group(x, y, visited):
+	var group = []
+	if all_dots[x][y] != null and all_dots[x][y].matched and not is_visited(x, y, visited):
+		var dot_color = all_dots[x][y].color  # Get the color of the starting dot
+		flood_fill_group(x, y, group, visited, dot_color)  # Fill the group with connected dots of the same color
+	return group
+
+
+# This function uses flood fill to collect all the connected matched dots of the same color in the group
+# It marks dots as visited so they don't appear in another group
+func flood_fill_group(x, y, group, visited, dot_color):
+	var stack = [Vector2(x, y)]  # Use Vector2 to store the coordinates
+	while stack.size() > 0:
+		var pos = stack.pop_back()
+		var ix = pos.x
+		var iy = pos.y
+		if all_dots[ix][iy] != null and all_dots[ix][iy].matched and not is_visited(ix, iy, visited):
+			if all_dots[ix][iy].color == dot_color:  # Only add dots of the same color
+				group.append(all_dots[ix][iy])
+				visited.append(Vector2(ix, iy))  # Mark this dot as visited
+				# Check adjacent dots
+				if ix + 1 < width and all_dots[ix + 1][iy] != null and all_dots[ix + 1][iy].matched:
+					stack.append(Vector2(ix + 1, iy))
+				if ix - 1 >= 0 and all_dots[ix - 1][iy] != null and all_dots[ix - 1][iy].matched:
+					stack.append(Vector2(ix - 1, iy))
+				if iy + 1 < height and all_dots[ix][iy + 1] != null and all_dots[ix][iy + 1].matched:
+					stack.append(Vector2(ix, iy + 1))
+				if iy - 1 >= 0 and all_dots[ix][iy - 1] != null and all_dots[ix][iy - 1].matched:
+					stack.append(Vector2(ix, iy - 1))
+
+
+# Helper function to check if a dot has already been visited in a group
+func is_visited(x, y, visited):
+	return visited.has(Vector2(x, y))
 
 					
 func collapse_columns():
+	await get_tree().create_timer(0.3).timeout
 	for i in width:
 		for j in height:
 			if all_dots[i][j] == null:
@@ -419,6 +519,7 @@ func collapse_columns():
 						all_dots[i][k] = null
 						break
 	refill_timer.start()
+
 
 func refill_columns():
 	for i in width:
@@ -450,15 +551,14 @@ func on_match_timer_timeout():
 	controlling = false
 
 func number_of_destroy(color):
-	if destroyed_count >= 4 and color == "pink" :
+	if destroyed_count >= 5 and color == "pink" :
 		trump_attack.play_animation_trump()
 		
-	if destroyed_count >= 4 and color == "red" :
+	if destroyed_count >= 5 and color == "red" :
 		xi_attack.play_animation_xi()
 	
-	if destroyed_count >= 4 and color == "green":
+	if destroyed_count >= 5 and color == "green":
 		kim_attack.play_animation_kim()
 	
-	if destroyed_count >= 4 and color == "blue":
+	if destroyed_count >= 5 and color == "blue":
 		putin_attack.play_animation_putin()
-		
