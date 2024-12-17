@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://bn68vxvojvert"]
+[gd_scene load_steps=55 format=3 uid="uid://bn68vxvojvert"]
 
 [ext_resource type="Script" path="res://Scripts/Grid.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://do1trrd35reag" path="res://Assets/trump.png" id="2_ar7mw"]
@@ -367,6 +367,154 @@ _data = {
 "RESET": SubResource("Animation_rrd5d")
 }
 
+[sub_resource type="Animation" id="Animation_66be0"]
+resource_name = "labelAttack"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(503, 573), Vector2(252, 197)]
+}
+
+[sub_resource type="Animation" id="Animation_j3e2p"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(503, 573)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xkgs7"]
+_data = {
+"RESET": SubResource("Animation_j3e2p"),
+"labelAttack": SubResource("Animation_66be0")
+}
+
+[sub_resource type="Animation" id="Animation_l54xg"]
+resource_name = "labelAttack"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(5, 573), Vector2(252, 197)]
+}
+
+[sub_resource type="Animation" id="Animation_ijd0d"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(5, 573)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_k00nd"]
+_data = {
+"RESET": SubResource("Animation_ijd0d"),
+"labelAttack": SubResource("Animation_l54xg")
+}
+
+[sub_resource type="Animation" id="Animation_nifpv"]
+resource_name = "labelAttack"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(172, 573), Vector2(252, 197)]
+}
+
+[sub_resource type="Animation" id="Animation_m5uqp"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(172, 573)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jjj7g"]
+_data = {
+"RESET": SubResource("Animation_m5uqp"),
+"labelAttack": SubResource("Animation_nifpv")
+}
+
+[sub_resource type="Animation" id="Animation_jdkfn"]
+resource_name = "labelAttack"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(338, 573), Vector2(252, 197)]
+}
+
+[sub_resource type="Animation" id="Animation_mt0ft"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(338, 573)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_crse6"]
+_data = {
+"RESET": SubResource("Animation_mt0ft"),
+"labelAttack": SubResource("Animation_jdkfn")
+}
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_1bge5"]
 animations = [{
 "frames": [{
@@ -676,6 +824,11 @@ theme_override_fonts/font = ExtResource("6_rbvyy")
 theme_override_font_sizes/font_size = 10
 horizontal_alignment = 1
 
+[node name="labelFriesAnimation" type="AnimationPlayer" parent="labelFries"]
+libraries = {
+"": SubResource("AnimationLibrary_xkgs7")
+}
+
 [node name="labelPudding" type="Label" parent="."]
 offset_left = 5.0
 offset_top = 573.0
@@ -686,6 +839,11 @@ theme_override_fonts/font = ExtResource("6_rbvyy")
 theme_override_font_sizes/font_size = 10
 horizontal_alignment = 1
 
+[node name="labelPuddingAnimation" type="AnimationPlayer" parent="labelPudding"]
+libraries = {
+"": SubResource("AnimationLibrary_k00nd")
+}
+
 [node name="labelBomb" type="Label" parent="."]
 offset_left = 172.0
 offset_top = 573.0
@@ -695,6 +853,11 @@ scale = Vector2(3, 3)
 theme_override_fonts/font = ExtResource("6_rbvyy")
 theme_override_font_sizes/font_size = 10
 horizontal_alignment = 1
+
+[node name="labelBombAnimation" type="AnimationPlayer" parent="labelBomb"]
+libraries = {
+"": SubResource("AnimationLibrary_jjj7g")
+}
 
 [node name="labelVirus" type="Label" parent="."]
 offset_left = 338.0
@@ -707,6 +870,11 @@ theme_override_font_sizes/font_size = 10
 text = "
 "
 horizontal_alignment = 1
+
+[node name="labelVirusAnimation" type="AnimationPlayer" parent="labelVirus"]
+libraries = {
+"": SubResource("AnimationLibrary_crse6")
+}
 
 [node name="labelBodyguard" type="Label" parent="."]
 offset_left = -19.0

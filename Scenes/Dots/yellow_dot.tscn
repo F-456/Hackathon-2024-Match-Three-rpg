@@ -1,7 +1,68 @@
-[gd_scene load_steps=3 format=3 uid="uid://dhw8ict00vn3n"]
+[gd_scene load_steps=6 format=3 uid="uid://dhw8ict00vn3n"]
 
 [ext_resource type="PackedScene" uid="uid://da0pp1wsvdhvy" path="res://Scenes/Dot.tscn" id="2"]
 [ext_resource type="Texture2D" uid="uid://bao8ceubbg10a" path="res://Sprites/Bodyguard.png" id="2_jpunh"]
+
+[sub_resource type="Animation" id="Animation_wg4sd"]
+resource_name = "disappear"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.233333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(2.5, 2.5), Vector2(0.1, 0.1)]
+}
+
+[sub_resource type="Animation" id="Animation_mhqm6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2.5, 2.5)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_n5s7j"]
+_data = {
+"RESET": SubResource("Animation_mhqm6"),
+"disappear": SubResource("Animation_wg4sd")
+}
 
 [node name="bodyguard" instance=ExtResource("2")]
 color = "yellow"
@@ -9,3 +70,8 @@ color = "yellow"
 [node name="Sprite2D" parent="." index="0"]
 scale = Vector2(2.5, 2.5)
 texture = ExtResource("2_jpunh")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1"]
+libraries = {
+"": SubResource("AnimationLibrary_n5s7j")
+}

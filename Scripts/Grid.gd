@@ -237,6 +237,13 @@ func spawn_dots():
 			dot.position = grid_to_pixel(i, j)
 			all_dots[i][j] = dot
 			
+			# Debug: Ensure AnimationPlayer exists
+			"""if dot.has_node("AnimationPlayer"):
+				print("AnimationPlayer exists in the dot!")
+			else:
+				print("AnimationPlayer is missing from this dot.")"""
+			
+			
 func match_at(i, j, color):
 	if i > 1:
 		if all_dots[i - 1][j] != null && all_dots[i - 2][j] != null:
@@ -399,10 +406,9 @@ func destroy_matches():
 	destroyed_count = 0
 	var total_damage = 0
 
-	var match_delay = 0.5  # Set the delay between match group destructions (in seconds)
+	var match_delay = 0 # Set the delay between match group destructions (in seconds)
 	var matches_to_destroy = []  # Store the matched groups
 	var visited = []  # To track visited dots so they are not part of multiple groups
-	
 
 	# Collect all the matched groups
 	for i in range(width):
@@ -421,25 +427,53 @@ func destroy_matches():
 	var first_match = true  # Flag to track the first match
 
 	for group in matches_to_destroy:
+		# Trigger combo count, sound, and label updates immediately
+		combo_count += 1
+		update_combo_label()
+		play_combo_sound(combo_count)
+		
 		if not first_match:
-			# Wait for the delay before destroying this group
-			await get_tree().create_timer(match_delay).timeout
+			pass
 		else:
 			first_match = false  # After the first match, disable the first match condition
 
-		# Destroy the dots in the current group
+		# Play animations for all dots in the group simultaneously
 		for dot in group:
-			dot.queue_free()  # Destroy the dot
 			update_sprite_destroyed_count(dot.color)  # Update count for destroyed color
+			
+			# Check if the count reaches the threshold of 4 and trigger animations
+			var color_map = {
+				"blue": "pudding",
+				"green": "bomb",
+				"pink": "fries",
+				"red": "virus",
+				"yellow": "body_guard"
+			}
+			if dot.color in color_map and sprite_destroyed_count[color_map[dot.color]] >= 4:
+				number_of_destroy(dot.color)  # Trigger animation or special action
+			
+			# Play animation for the current dot
+			var anim_player = dot.get_node_or_null("AnimationPlayer")
+			if anim_player:
+				anim_player.play("disappear")
 		
-		combo_count += 1  # Increment combo count each time a group is destroyed
-		update_combo_label()
+		update_labels()  # Update any other labels, such as score or time
 		
-		# Call update_labels after every match is destroyed to keep other labels updated
-		update_labels()  # Update any other labels such as score or time
-
-		# Play combo sound based on combo count
-		play_combo_sound(combo_count)
+		# Wait for the animation to finish for the entire group
+		var max_animation_time = 0.5  # Adjust this to match the duration of your "disappear" animation
+		await get_tree().create_timer(max_animation_time).timeout
+		# After the animation, queue_free the dot
+		for dot in group:
+			destroyed_count += 1
+			dot.queue_free()  # Destroy the dot
+		
+		#combo_count += 1  # Increment combo count each time a group is destroyed
+		#update_combo_label()
+		
+		# Check if collapse should happen now
+		if !matches_being_destroyed:
+			collapse_timer.start()  # Make sure the collapse timer is started
+			break  # Avoid further operations until collapse is triggered
 
 	# Apply damage to zombies after all groups are destroyed
 	if zombies.size() > 0:
@@ -448,11 +482,10 @@ func destroy_matches():
 
 	# If any matches were destroyed, start the column collapse and refill processes
 	if was_matched:
+		collapse_columns()  # Start collapsing columns after matches are destroyed
 		collapse_timer.start()
 
 	matches_being_destroyed = false
-	number_of_destroy(color)
-	collapse_columns()  # Start collapsing columns after matches are destroyed
 
 # Function to play combo sound based on combo count
 func play_combo_sound(count: int):
@@ -551,14 +584,16 @@ func on_match_timer_timeout():
 	controlling = false
 
 func number_of_destroy(color):
-	if destroyed_count >= 5 and color == "pink" :
-		trump_attack.play_animation_trump()
-		
-	if destroyed_count >= 5 and color == "red" :
-		xi_attack.play_animation_xi()
-	
-	if destroyed_count >= 5 and color == "green":
-		kim_attack.play_animation_kim()
-	
-	if destroyed_count >= 5 and color == "blue":
+	print("number_of_destroy_test")
+	print("Destroyed count:", destroyed_count, "Color:", color)
+	if color == "blue":
 		putin_attack.play_animation_putin()
+	
+	if color == "green":
+		kim_attack.play_animation_kim()
+		
+	if color == "red" :
+		xi_attack.play_animation_xi()
+		
+	if color == "pink" :
+		trump_attack.play_animation_trump()
