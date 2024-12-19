@@ -139,14 +139,20 @@ func heroes_attack():
 	# Sequentially attack zombies
 	for hero_name in hero_names:
 		await attack_hero(hero_name)
-		
+	
 	reset_labels()
+	
+	can_touch_input = true  # Restore touch input
 
 # Individual hero attack with animation
 func attack_hero(hero_name: String) -> void:
 	if hero_name in hero_damage and hero_damage[hero_name] > 0:
 		print("%s attacks dealing %d damage" % [hero_name, hero_damage[hero_name]])
 		
+		# Assuming zombies[0] is the target for simplicity
+		if zombies.size() > 0:
+			zombies[0].take_damage(hero_damage[hero_name])
+			
 		# Play attack animation
 		match hero_name:
 			"Hero1":
@@ -171,10 +177,6 @@ func attack_hero(hero_name: String) -> void:
 				label_virus_animation.play("RESET")
 			"Hero4":
 				label_fries_animation.play("RESET")
-		
-		# Assuming zombies[0] is the target for simplicity
-		if zombies.size() > 0:
-			zombies[0].take_damage(hero_damage[hero_name])
 		
 		#await get_tree().create_timer(0.1).timeout  # Wait 1 second after the attack animation
 	else:
@@ -374,10 +376,13 @@ func is_in_grid(grid_position):
 			return true
 	return false
 
+var can_touch_input = true  # Controls whether touch input is allowed
+
 func touch_input():
-	if Input.is_action_just_pressed("ui_touch"):
+	if Input.is_action_just_pressed("ui_touch") and can_touch_input:
 		combo_label.text = ""
 		combo_count = 0
+		
 		# If a touch begins (ui_touch pressed), records the grid position
 		var touch_pos = get_global_mouse_position()
 		if is_in_grid(pixel_to_grid(touch_pos.x,touch_pos.y)):
@@ -496,12 +501,14 @@ func is_piece_null(column, row):
 	return false
 
 func match_and_dim(item):
+	can_touch_input = false  # Disable touch input
 	item.matched = true
 	item.dim()
 	
 var color
 
 func destroy_matches():
+	can_touch_input = false  # Disable touch input
 	var was_matched = false
 	destroyed_count = 0
 	var total_damage = 0
@@ -549,8 +556,9 @@ func destroy_matches():
 				"red": "virus",
 				"yellow": "body_guard"
 			}
+			# Trigger special animations under certain requirements
 			if dot.color in color_map and sprite_destroyed_count[color_map[dot.color]] >= 4:
-				number_of_destroy(dot.color)  # Trigger animation or special action
+				number_of_destroy(dot.color) 
 			
 			# Play animation for the current dot
 			var anim_player = dot.get_node_or_null("AnimationPlayer")
@@ -634,6 +642,7 @@ func is_visited(x, y, visited):
 
 					
 func collapse_columns():
+	can_touch_input = false  # Disable touch input
 	await get_tree().create_timer(0.3).timeout
 	for i in width:
 		for j in height:
@@ -648,6 +657,7 @@ func collapse_columns():
 
 
 func refill_columns():
+	can_touch_input = false  # Disable touch input
 	for i in width:
 		for j in height:
 			if all_dots[i][j] == null:

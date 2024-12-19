@@ -1,27 +1,121 @@
-[gd_scene load_steps=9 format=3 uid="uid://dduedpq45ldhj"]
+[gd_scene load_steps=12 format=3 uid="uid://dduedpq45ldhj"]
 
 [ext_resource type="Texture2D" uid="uid://cu1llmox44mlj" path="res://Sprites/zombie1.png" id="1_leviq"]
 [ext_resource type="Script" path="res://Scripts/zombie.gd" id="1_xbqkw"]
 [ext_resource type="Texture2D" uid="uid://sjbhp8cnay5o" path="res://Sprites/zombie2.png" id="2_xljbx"]
 [ext_resource type="Texture2D" uid="uid://bc86oekfbrr3l" path="res://Sprites/zombie3.png" id="3_58gkt"]
 [ext_resource type="FontFile" uid="uid://clg5yxaemtrnq" path="res://Font/Pixeled.ttf" id="5_eo1ex"]
+[ext_resource type="AudioStream" uid="uid://d3o1fbiwtkvlg" path="res://SFX/attackSound.MP3" id="6_4yhp2"]
 
-[sub_resource type="Animation" id="Animation_oudfq"]
-resource_name = "new_animation"
+[sub_resource type="Animation" id="Animation_h0eg1"]
+resource_name = "attacked"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -20), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Color(0.964706, 0.384314, 0, 1), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("attacked:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_caf6a"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("attacked:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_7cx8v"]
+resource_name = "dead"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0, 0, 1)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1msum"]
 _data = {
-"new_animation": SubResource("Animation_oudfq")
+"RESET": SubResource("Animation_caf6a"),
+"attacked": SubResource("Animation_h0eg1"),
+"dead": SubResource("Animation_7cx8v")
 }
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_axlkb"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_leviq")
+"texture": ExtResource("2_xljbx")
 }, {
 "duration": 1.0,
-"texture": ExtResource("2_xljbx")
+"texture": ExtResource("1_leviq")
 }, {
 "duration": 1.0,
 "texture": ExtResource("3_58gkt")
@@ -34,7 +128,7 @@ animations = [{
 [node name="Zombie" type="Node2D"]
 script = ExtResource("1_xbqkw")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="zombie_animation" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_1msum")
 }
@@ -42,7 +136,8 @@ libraries = {
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_axlkb")
-frame_progress = 0.65463
+autoplay = "default"
+frame_progress = 0.781191
 
 [node name="zombie_label" type="Label" parent="."]
 offset_left = -19.0
@@ -53,3 +148,7 @@ theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_fonts/font = ExtResource("5_eo1ex")
 theme_override_font_sizes/font_size = 20
 horizontal_alignment = 1
+
+[node name="attacked" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_4yhp2")
+volume_db = 15.459
