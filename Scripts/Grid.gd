@@ -29,16 +29,10 @@ extends Node2D
 @onready var x_start = (get_window().size.x - (width * offset) - offset / 2)
 @onready var y_start = ((get_window().size.y / 2.0) + ((height / 2.0) * offset) - (offset / 2))
 
-@export var zombie_scene: PackedScene # Reference to the zombie scene (make sure it's assigned in the Inspector)
-var zombies = []  # List to store zombies
+#@export var zombie_scene: PackedScene # Reference to the zombie scene (make sure it's assigned in the Inspector)
 
-# List to keep track of active enemies
-var active_enemies: Array = []
-
-# Declare the variables at the top
-var zombie_count: int = 30  # Example starting zombie count
-var zombie_label: Label  # Reference to the label that displays the zombie count
-var zombie_sprite : AnimatedSprite2D
+var heroes = []  # List of hero nodes
+var zombies: Array = []  # List to store zombies
 
 @onready var possible_dots = [
 	preload("res://Scenes/Dots/blue_dot.tscn"),
@@ -112,33 +106,69 @@ func update_sprite_destroyed_count(current_color):
 	}
 	if current_color in color_map:
 		sprite_destroyed_count[color_map[current_color]] += 1
-		print("%s number is now %d" % [color_map[current_color], sprite_destroyed_count[color_map[current_color]]])
-		
-		# Decrease zombie count every time a sprite is destroyed
-		zombie_count -= 1
-		update_zombie_label()  # Update the label with the new zombie count
-		
-		# If zombie count is less than or equal to 0, hide the zombie sprite and label
-		if zombie_count <= 0:
-			hide_zombie_and_label()
+		# print("%s number is now %d" % [color_map[current_color], sprite_destroyed_count[color_map[current_color]]])
+
 
 func update_labels():
-	print("Labels updated: ", sprite_destroyed_count)  # Debugging line
+	# print("Labels updated: ", sprite_destroyed_count)  # Debugging line
 	label_fries.text = "%d" %sprite_destroyed_count["fries"]
 	label_bomb.text = "%d" %sprite_destroyed_count["bomb"]
 	label_bodyguard.text = "%d" %sprite_destroyed_count["body_guard"]
 	label_virus.text = "%d" %sprite_destroyed_count["virus"]
 	label_pudding.text = "%d" %sprite_destroyed_count["pudding"]
 
-func update_zombie_label():
-	zombie_label.text = str(zombie_count)  # Update the zombie label text
+# Define the attack damage for each hero
+const HERO_ATTACK_DAMAGE = {
+	"Hero1": 10,  # Pudding damage
+	"Hero2": 20,  # Bomb damage
+	"Hero3": 15,  # Virus damage
+	"Hero4": 25   # Fries damage
+}
 
+func heroes_attack():
+	await get_tree().create_timer(1).timeout
+	print("attack")
+	for hero in heroes:
+		print("Attacking with hero: ", hero.name)
+		for zombie in zombies:
+			print("Before attack, zombie HP: %d" % zombie.hp)
+			if zombie.hp > 0:
+				zombie.hp -= hero.attack_power
+				print("After attack, zombie HP: %d" % zombie.hp)
+				zombie.update_zombie_label()  # Update the label to show new HP
+				if zombie.hp <= 0:
+					print("Zombie defeated!")
+					zombie.queue_free()  # Remove defeated zombie
+				break
+
+# Function to spawn zombies
+func spawn_zombie(position: Vector2):
+	var zombie_scene = preload("res://Sprites/zombie.tscn")  # Adjust path
+	var zombie_instance = zombie_scene.instantiate()
+	if zombie_instance:
+		print("Zombie spawned with HP: ", zombie_instance)
+		add_child(zombie_instance)
+		zombie_instance.position = position
+		zombies.append(zombie_instance)
+		print("Zombie spawned with HP:", zombie_instance.hp)
+	else:
+		print("Zombie instantiation failed.")
+	
+# Damage the zombie
+func damage_zombie(zombie_instance, damage_amount):
+	print("Trying to damage zombie")
+	if zombie_instance:
+		print("Zombie instance is valid. Applying damage:", damage_amount)
+		zombie_instance.take_damage(damage_amount)
+	else:
+		print("Zombie instance is invalid!")
+		
 # Function to hide the zombie sprite and the label when the count reaches 0
-func hide_zombie_and_label():
+func hide_zombie_and_label(zombie):
 	zombie_die.play("disappear")
 	await get_tree().create_timer(1).timeout
-	zombie_sprite.visible = false
-	zombie_label.visible = false
+	zombie.get_node("zombie_sprite").visible = false
+	zombie.get_node("zombie_label").visible = false
 
 var destroyed_count = 0
 var label_display
@@ -159,15 +189,16 @@ func _ready() -> void:
 	timer_label.text = ""
 	add_child(match_timer)
 	
-	#spawn_zombie(Vector2(300, 500))  # Example spawn position
-	
-	zombie_label = $"../Zombie/zombie_label"  # Make sure to assign the label node correctly
-	zombie_sprite = $"../Zombie/zombie_sprite"
 	
 	# Ensure an AudioStreamPlayer node is present
 	if not audio_player:
 		audio_player = AudioStreamPlayer.new()
 		add_child(audio_player)  # Add the player to the scene if not already added
+	
+	# Spawn enemies
+	var zombie1 = spawn_zombie(Vector2(275, 266))
+	if zombies.size() > 0:
+		damage_zombie(zombies[0], 10)
 
 	
 func setup_timers():
@@ -464,8 +495,9 @@ func destroy_matches():
 		await get_tree().create_timer(max_animation_time).timeout
 		# After the animation, queue_free the dot
 		for dot in group:
-			destroyed_count += 1
-			dot.queue_free()  # Destroy the dot
+			if dot != null:
+				destroyed_count += 1
+				dot.queue_free()  # Destroy the dot
 		
 		#combo_count += 1  # Increment combo count each time a group is destroyed
 		#update_combo_label()
@@ -474,11 +506,6 @@ func destroy_matches():
 		if !matches_being_destroyed:
 			collapse_timer.start()  # Make sure the collapse timer is started
 			break  # Avoid further operations until collapse is triggered
-
-	# Apply damage to zombies after all groups are destroyed
-	if zombies.size() > 0:
-		for zombie in zombies:
-			zombie.take_damage(total_damage)
 
 	# If any matches were destroyed, start the column collapse and refill processes
 	if was_matched:
@@ -570,7 +597,9 @@ func refill_columns():
 				add_child(dot)
 				dot.position = grid_to_pixel(i, j)
 				all_dots[i][j] = dot
-				
+	after_refill()
+
+# Check if the grid stops collapsing and matching
 func after_refill():
 	for i in width:
 		for j in height:
@@ -579,6 +608,7 @@ func after_refill():
 					find_matches()
 					destroy_timer.start()
 					return
+	heroes_attack()
 
 func on_match_timer_timeout():
 	controlling = false
