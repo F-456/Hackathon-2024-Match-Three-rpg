@@ -7,6 +7,10 @@ extends Node2D
 @onready var kim_attack = $KimAttack
 @onready var putin_attack = $PutinAttack
 
+@onready var label_pudding_animation = $"../labelPudding/labelPuddingAnimation"
+@onready var label_bomb_animation = $"../labelBomb/labelBombAnimation"
+@onready var label_virus_animation = $"../labelVirus/labelVirusAnimation"
+@onready var label_fries_animation = $"../labelFries/labelFriesAnimation"
 
 @onready var label_pudding: Label = $"../labelPudding"
 @onready var label_fries: Label = $"../labelFries"
@@ -82,7 +86,6 @@ var final_touch = Vector2(0,0)
 # Tracks if the player is actively interacting.
 var controlling = false
 
-
 # New mechanic
 var matches_being_destroyed = false
 
@@ -105,7 +108,6 @@ func update_sprite_destroyed_count(current_color):
 	if current_color in color_map:
 		sprite_destroyed_count[color_map[current_color]] += 1
 		# print("%s number is now %d" % [color_map[current_color], sprite_destroyed_count[color_map[current_color]]])
-
 
 func update_labels():
 	# print("Labels updated: ", sprite_destroyed_count)  # Debugging line
@@ -132,7 +134,7 @@ func heroes_attack():
 		print("No zombies to attack!")
 		return
 	
-	var hero_names = ["Hero1", "Hero2", "Hero3", "Hero4"] 
+	var hero_names = ["Hero1", "Hero2", "Hero3", "Hero4"]
 	
 	# Sequentially attack zombies
 	for hero_name in hero_names:
@@ -140,17 +142,56 @@ func heroes_attack():
 		
 	reset_labels()
 
-# Individual hero attack with delay
+# Individual hero attack with animation
 func attack_hero(hero_name: String) -> void:
 	if hero_name in hero_damage and hero_damage[hero_name] > 0:
 		print("%s attacks dealing %d damage" % [hero_name, hero_damage[hero_name]])
+		
+		# Play attack animation
+		match hero_name:
+			"Hero1":
+				label_pudding_animation.play("pudding_attack")
+			"Hero2":
+				label_bomb_animation.play("bomb_attack")
+			"Hero3":
+				label_virus_animation.play("virus_attack")
+			"Hero4":
+				label_fries_animation.play("fries_attack")
+		
+		# Wait until the animation is finished using signal
+		await wait_for_animation_to_finish(hero_name)
+		
+		# Reset animation after it finishes
+		match hero_name:
+			"Hero1":
+				label_pudding_animation.play("RESET")
+			"Hero2":
+				label_bomb_animation.play("RESET")
+			"Hero3":
+				label_virus_animation.play("RESET")
+			"Hero4":
+				label_fries_animation.play("RESET")
+		
 		# Assuming zombies[0] is the target for simplicity
 		if zombies.size() > 0:
 			zombies[0].take_damage(hero_damage[hero_name])
-		await get_tree().create_timer(1.0).timeout
+		
+		#await get_tree().create_timer(0.1).timeout  # Wait 1 second after the attack animation
 	else:
 		print("%s has no attack damage to deal." % hero_name)
-	await get_tree().create_timer(0.1).timeout
+	#await get_tree().create_timer(0.1).timeout
+
+# Function to wait for the animation to finish
+func wait_for_animation_to_finish(hero_name: String) -> void:
+	match hero_name:
+		"Hero1":
+			await label_pudding_animation.animation_finished
+		"Hero2":
+			await label_bomb_animation.animation_finished
+		"Hero3":
+			await label_virus_animation.animation_finished
+		"Hero4":
+			await label_fries_animation.animation_finished
 
 # Reset hero labels after attacks
 func reset_labels() -> void:
@@ -226,7 +267,6 @@ func _ready() -> void:
 	timer_label.text = ""
 	add_child(match_timer)
 	
-	
 	# Ensure an AudioStreamPlayer node is present
 	if not audio_player:
 		audio_player = AudioStreamPlayer.new()
@@ -235,8 +275,7 @@ func _ready() -> void:
 	# Spawn enemies
 	var zombie1 = spawn_zombie(Vector2(275, 266))
 	if zombies.size() > 0:
-		damage_zombie(zombies[0], 10)
-
+		damage_zombie(zombies[0], 0)
 	
 func setup_timers():
 	# Manage delays between destroying matches, collapsing columns, and refilling the grid
@@ -272,7 +311,6 @@ func stop_match_timer():
 	display_score_timer.set_wait_time(1.0)
 	add_child(display_score_timer)
 	
-	
 func is_in_array(array, item):
 	for i in array.size():
 		if array[i] == item:
@@ -304,12 +342,6 @@ func spawn_dots():
 			add_child(dot)
 			dot.position = grid_to_pixel(i, j)
 			all_dots[i][j] = dot
-			
-			# Debug: Ensure AnimationPlayer exists
-			"""if dot.has_node("AnimationPlayer"):
-				print("AnimationPlayer exists in the dot!")
-			else:
-				print("AnimationPlayer is missing from this dot.")"""
 			
 			
 func match_at(i, j, color):
@@ -535,9 +567,6 @@ func destroy_matches():
 			if dot != null:
 				destroyed_count += 1
 				dot.queue_free()  # Destroy the dot
-		
-		#combo_count += 1  # Increment combo count each time a group is destroyed
-		#update_combo_label()
 		
 		# Check if collapse should happen now
 		if !matches_being_destroyed:

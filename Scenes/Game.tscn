@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://bn68vxvojvert"]
+[gd_scene load_steps=49 format=3 uid="uid://bn68vxvojvert"]
 
 [ext_resource type="Script" path="res://Scripts/Grid.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://do1trrd35reag" path="res://Assets/trump.png" id="2_ar7mw"]
@@ -22,6 +22,7 @@
 [ext_resource type="AudioStream" uid="uid://dqwe1h4nm7e4k" path="res://SFX/KimAttack1.MP3" id="17_3lymp"]
 [ext_resource type="Texture2D" uid="uid://dmn1yfsai27s0" path="res://Assets/putin attack.png" id="18_3poj8"]
 [ext_resource type="AudioStream" uid="uid://cdku4jovxpeqq" path="res://SFX/PutinAttack1.MP3" id="19_b0k6h"]
+[ext_resource type="AudioStream" uid="uid://d3o1fbiwtkvlg" path="res://SFX/attackSound.MP3" id="21_2kwkf"]
 
 [sub_resource type="Animation" id="Animation_3wihk"]
 resource_name = "Animation1"
@@ -363,43 +364,6 @@ _data = {
 "RESET": SubResource("Animation_rrd5d")
 }
 
-[sub_resource type="Animation" id="Animation_j3e2p"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(503, 573)]
-}
-
-[sub_resource type="Animation" id="Animation_66be0"]
-resource_name = "labelAttack"
-length = 0.2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(503, 573), Vector2(252, 197)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_xkgs7"]
-_data = {
-"RESET": SubResource("Animation_j3e2p"),
-"labelAttack": SubResource("Animation_66be0")
-}
-
 [sub_resource type="Animation" id="Animation_ijd0d"]
 length = 0.001
 tracks/0/type = "value"
@@ -414,10 +378,34 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(5, 573)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../attackSound:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_l54xg"]
-resource_name = "labelAttack"
-length = 0.2
+resource_name = "pudding_attack"
+length = 0.8
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -430,11 +418,39 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(5, 573), Vector2(252, 197)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../attackSound:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_h1idq"]
+resource_name = "reset"
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_k00nd"]
 _data = {
 "RESET": SubResource("Animation_ijd0d"),
-"labelAttack": SubResource("Animation_l54xg")
+"pudding_attack": SubResource("Animation_l54xg"),
+"reset": SubResource("Animation_h1idq")
 }
 
 [sub_resource type="Animation" id="Animation_m5uqp"]
@@ -451,10 +467,34 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(172, 573)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../attackSound:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_nifpv"]
-resource_name = "labelAttack"
-length = 0.2
+resource_name = "bomb_attack"
+length = 0.8
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -467,11 +507,35 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(172, 573), Vector2(252, 197)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../attackSound:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jjj7g"]
 _data = {
 "RESET": SubResource("Animation_m5uqp"),
-"labelAttack": SubResource("Animation_nifpv")
+"bomb_attack": SubResource("Animation_nifpv")
 }
 
 [sub_resource type="Animation" id="Animation_mt0ft"]
@@ -488,10 +552,34 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(338, 573)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../attackSound:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_jdkfn"]
-resource_name = "labelAttack"
-length = 0.2
+resource_name = "virus_attack"
+length = 0.8
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -504,14 +592,131 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(338, 573), Vector2(252, 197)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../attackSound:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_crse6"]
 _data = {
 "RESET": SubResource("Animation_mt0ft"),
-"labelAttack": SubResource("Animation_jdkfn")
+"virus_attack": SubResource("Animation_jdkfn")
+}
+
+[sub_resource type="Animation" id="Animation_j3e2p"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(503, 573)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../attackSound:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_66be0"]
+resource_name = "fries_attack"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(503, 573), Vector2(252, 197)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../attackSound:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xkgs7"]
+_data = {
+"RESET": SubResource("Animation_j3e2p"),
+"fries_attack": SubResource("Animation_66be0")
 }
 
 [node name="Game" type="Node"]
+
+[node name="Hero1" type="Node" parent="."]
+
+[node name="Hero2" type="Node" parent="."]
+
+[node name="Hero3" type="Node" parent="."]
+
+[node name="Hero4" type="Node" parent="."]
 
 [node name="ColorRect" type="ColorRect" parent="."]
 anchors_preset = 15
@@ -688,6 +893,10 @@ script = ExtResource("6_tdh47")
 stream = ExtResource("19_b0k6h")
 volume_db = 15.459
 
+[node name="attackSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("21_2kwkf")
+volume_db = 15.294
+
 [node name="swapping" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_cq0i5")
 
@@ -706,22 +915,6 @@ offset_right = 872.0
 offset_bottom = 608.0
 theme_override_fonts/font = ExtResource("6_rbvyy")
 horizontal_alignment = 1
-
-[node name="labelFries" type="Label" parent="."]
-offset_left = 503.0
-offset_top = 573.0
-offset_right = 528.0
-offset_bottom = 615.0
-scale = Vector2(3, 3)
-theme_override_constants/outline_size = 3
-theme_override_fonts/font = ExtResource("6_rbvyy")
-theme_override_font_sizes/font_size = 10
-horizontal_alignment = 1
-
-[node name="labelFriesAnimation" type="AnimationPlayer" parent="labelFries"]
-libraries = {
-"": SubResource("AnimationLibrary_xkgs7")
-}
 
 [node name="labelPudding" type="Label" parent="."]
 offset_left = 5.0
@@ -768,6 +961,22 @@ horizontal_alignment = 1
 [node name="labelVirusAnimation" type="AnimationPlayer" parent="labelVirus"]
 libraries = {
 "": SubResource("AnimationLibrary_crse6")
+}
+
+[node name="labelFries" type="Label" parent="."]
+offset_left = 503.0
+offset_top = 573.0
+offset_right = 528.0
+offset_bottom = 615.0
+scale = Vector2(3, 3)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("6_rbvyy")
+theme_override_font_sizes/font_size = 10
+horizontal_alignment = 1
+
+[node name="labelFriesAnimation" type="AnimationPlayer" parent="labelFries"]
+libraries = {
+"": SubResource("AnimationLibrary_xkgs7")
 }
 
 [node name="labelBodyguard" type="Label" parent="."]
