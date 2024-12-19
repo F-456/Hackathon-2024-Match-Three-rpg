@@ -29,10 +29,9 @@ extends Node2D
 @onready var x_start = (get_window().size.x - (width * offset) - offset / 2)
 @onready var y_start = ((get_window().size.y / 2.0) + ((height / 2.0) * offset) - (offset / 2))
 
-#@export var zombie_scene: PackedScene # Reference to the zombie scene (make sure it's assigned in the Inspector)
-
 var heroes = []  # List of hero nodes
 var zombies: Array = []  # List to store zombies
+var hero_damage = {}  # To store attack damage for each hero
 
 @onready var possible_dots = [
 	preload("res://Scenes/Dots/blue_dot.tscn"),
@@ -66,7 +65,6 @@ var time_remaining = match_time_limit # Remaining time counter
 var match_timer_running = false # To check if the timer is active
 
 var display_score_timer = Timer.new()
-
 
 var all_dots = []
 
@@ -116,30 +114,69 @@ func update_labels():
 	label_bodyguard.text = "%d" %sprite_destroyed_count["body_guard"]
 	label_virus.text = "%d" %sprite_destroyed_count["virus"]
 	label_pudding.text = "%d" %sprite_destroyed_count["pudding"]
-
-# Define the attack damage for each hero
-const HERO_ATTACK_DAMAGE = {
-	"Hero1": 10,  # Pudding damage
-	"Hero2": 20,  # Bomb damage
-	"Hero3": 15,  # Virus damage
-	"Hero4": 25   # Fries damage
-}
+	
+	# Update hero damage values dynamically based on labels
+	hero_damage["Hero1"] = int(label_pudding.text) if label_pudding.text != "" else 0
+	hero_damage["Hero2"] = int(label_bomb.text) if label_bomb.text != "" else 0
+	hero_damage["Hero3"] = int(label_virus.text) if label_virus.text != "" else 0
+	hero_damage["Hero4"] = int(label_fries.text) if label_fries.text != "" else 0
+	
+	# Update label text (optional visual update logic)
+	print("Hero1 damage: ", hero_damage["Hero1"])
+	print("Hero2 damage: ", hero_damage["Hero2"])
+	print("Hero3 damage: ", hero_damage["Hero3"])
+	print("Hero4 damage: ", hero_damage["Hero4"])
 
 func heroes_attack():
-	await get_tree().create_timer(1).timeout
-	print("attack")
-	for hero in heroes:
-		print("Attacking with hero: ", hero.name)
-		for zombie in zombies:
-			print("Before attack, zombie HP: %d" % zombie.hp)
-			if zombie.hp > 0:
-				zombie.hp -= hero.attack_power
-				print("After attack, zombie HP: %d" % zombie.hp)
-				zombie.update_zombie_label()  # Update the label to show new HP
-				if zombie.hp <= 0:
-					print("Zombie defeated!")
-					zombie.queue_free()  # Remove defeated zombie
-				break
+	if zombies.size() == 0:
+		print("No zombies to attack!")
+		return
+	
+	var hero_names = ["Hero1", "Hero2", "Hero3", "Hero4"] 
+	
+	# Sequentially attack zombies
+	for hero_name in hero_names:
+		await attack_hero(hero_name)
+		
+	reset_labels()
+
+# Individual hero attack with delay
+func attack_hero(hero_name: String) -> void:
+	if hero_name in hero_damage and hero_damage[hero_name] > 0:
+		print("%s attacks dealing %d damage" % [hero_name, hero_damage[hero_name]])
+		# Assuming zombies[0] is the target for simplicity
+		if zombies.size() > 0:
+			zombies[0].take_damage(hero_damage[hero_name])
+		await get_tree().create_timer(1.0).timeout
+	else:
+		print("%s has no attack damage to deal." % hero_name)
+	await get_tree().create_timer(0.1).timeout
+
+# Reset hero labels after attacks
+func reset_labels() -> void:
+	# Reset the sprite_destroyed_count dictionary
+	for key in sprite_destroyed_count.keys():
+		sprite_destroyed_count[key] = 0
+
+	# Reset labels
+	label_pudding.text = "0"
+	label_bomb.text = "0"
+	label_virus.text = "0"
+	label_fries.text = "0"
+
+	# Reset hero_damage values
+	hero_damage["Hero1"] = 0
+	hero_damage["Hero2"] = 0
+	hero_damage["Hero3"] = 0
+	hero_damage["Hero4"] = 0
+	
+	label_fries.text = "%d" %sprite_destroyed_count["fries"]
+	label_bomb.text = "%d" %sprite_destroyed_count["bomb"]
+	label_bodyguard.text = "%d" %sprite_destroyed_count["body_guard"]
+	label_virus.text = "%d" %sprite_destroyed_count["virus"]
+	label_pudding.text = "%d" %sprite_destroyed_count["pudding"]
+	
+	print("All hero labels and damage value reset.")
 
 # Function to spawn zombies
 func spawn_zombie(position: Vector2):
@@ -614,8 +651,7 @@ func on_match_timer_timeout():
 	controlling = false
 
 func number_of_destroy(color):
-	print("number_of_destroy_test")
-	print("Destroyed count:", destroyed_count, "Color:", color)
+	print("Destroyed color:", color)
 	if color == "blue":
 		putin_attack.play_animation_putin()
 	
