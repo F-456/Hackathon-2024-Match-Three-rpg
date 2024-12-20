@@ -138,7 +138,11 @@ func heroes_attack():
 	
 	# Sequentially attack zombies
 	for hero_name in hero_names:
-		await attack_hero(hero_name)
+		if zombies.size() > 0:  # Ensure zombie exists before attacking
+			await attack_hero(hero_name)
+		else:
+			print("All zombies are defeated. Stopping attacks.")
+			break
 	
 	reset_labels()
 	
@@ -151,7 +155,11 @@ func attack_hero(hero_name: String) -> void:
 		
 		# Assuming zombies[0] is the target for simplicity
 		if zombies.size() > 0:
-			zombies[0].take_damage(hero_damage[hero_name])
+			var target_zombie = zombies[0]
+			target_zombie.take_damage(hero_damage[hero_name])
+			
+			# Connect to the zombie_destroyed signal
+			target_zombie.connect("zombie_destroyed", Callable(self, "_on_zombie_destroyed"))
 			
 		# Play attack animation
 		match hero_name:
@@ -231,6 +239,9 @@ func spawn_zombie(position: Vector2):
 		zombie_instance.position = position
 		zombies.append(zombie_instance)
 		print("Zombie spawned with HP:", zombie_instance.hp)
+		
+		# Connect the zombie_destroyed signal to the handler
+		zombie_instance.connect("zombie_destroyed", Callable(self, "_on_zombie_destroyed"))
 	else:
 		print("Zombie instantiation failed.")
 	
@@ -243,12 +254,12 @@ func damage_zombie(zombie_instance, damage_amount):
 	else:
 		print("Zombie instance is invalid!")
 		
-# Function to hide the zombie sprite and the label when the count reaches 0
-func hide_zombie_and_label(zombie):
-	zombie_die.play("disappear")
-	await get_tree().create_timer(1).timeout
-	zombie.get_node("zombie_sprite").visible = false
-	zombie.get_node("zombie_label").visible = false
+# Handle attack stop for remaining heroes when enemy dies
+func _on_zombie_destroyed(zombie_instance):
+	if zombie_instance in zombies:
+		zombies.erase(zombie_instance)  # Remove the zombie from the list
+		print("Zombie destroyed and removed from the list.")
+
 
 var destroyed_count = 0
 var label_display
