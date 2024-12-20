@@ -155,11 +155,25 @@ func attack_hero(hero_name: String) -> void:
 		
 		# Assuming zombies[0] is the target for simplicity
 		if zombies.size() > 0:
-			var target_zombie = zombies[0]
+			var hero_type = ""
+			match hero_name:
+				"Hero1":
+					hero_type = "pudding"
+				"Hero2":
+					hero_type = "bomb"
+				"Hero3":
+					hero_type = "virus"
+				"Hero4":
+					hero_type = "fries"
+			
+			# Pass the hero type to the zombie's take_damage function
+			zombies[0].take_damage(hero_damage[hero_name], hero_type)
+			
+			"""var target_zombie = zombies[0]
 			target_zombie.take_damage(hero_damage[hero_name])
 			
 			# Connect to the zombie_destroyed signal
-			target_zombie.connect("zombie_destroyed", Callable(self, "_on_zombie_destroyed"))
+			target_zombie.connect("zombie_destroyed", Callable(self, "_on_zombie_destroyed"))"""
 			
 		# Play attack animation
 		match hero_name:
@@ -238,7 +252,7 @@ func spawn_zombie(position: Vector2):
 		add_child(zombie_instance)
 		zombie_instance.position = position
 		zombies.append(zombie_instance)
-		print("Zombie spawned with HP:", zombie_instance.hp)
+		#print("Zombie spawned with HP:", zombie_instance.hp)
 		
 		# Connect the zombie_destroyed signal to the handler
 		zombie_instance.connect("zombie_destroyed", Callable(self, "_on_zombie_destroyed"))
@@ -246,11 +260,11 @@ func spawn_zombie(position: Vector2):
 		print("Zombie instantiation failed.")
 	
 # Damage the zombie
-func damage_zombie(zombie_instance, damage_amount):
+func damage_zombie(zombie_instance, damage_amount, hero_type):
 	print("Trying to damage zombie")
 	if zombie_instance:
 		print("Zombie instance is valid. Applying damage:", damage_amount)
-		zombie_instance.take_damage(damage_amount)
+		zombie_instance.take_damage(damage_amount, hero_type)
 	else:
 		print("Zombie instance is invalid!")
 		
@@ -288,7 +302,10 @@ func _ready() -> void:
 	# Spawn enemies
 	var zombie1 = spawn_zombie(Vector2(275, 266))
 	if zombies.size() > 0:
-		damage_zombie(zombies[0], 0)
+		damage_zombie(zombies[0], 0, "pudding")
+		damage_zombie(zombies[0], 0, "bomb")
+		damage_zombie(zombies[0], 0, "virus")
+		damage_zombie(zombies[0], 0, "fries")
 	
 func setup_timers():
 	# Manage delays between destroying matches, collapsing columns, and refilling the grid
@@ -569,7 +586,7 @@ func destroy_matches():
 			}
 			# Trigger special animations under certain requirements
 			if dot.color in color_map and sprite_destroyed_count[color_map[dot.color]] >= 4:
-				number_of_destroy(dot.color) 
+				number_of_destroy(dot.color)
 			
 			# Play animation for the current dot
 			var anim_player = dot.get_node_or_null("AnimationPlayer")
